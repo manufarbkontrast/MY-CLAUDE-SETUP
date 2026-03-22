@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "lightpanda": {
+      "command": "/opt/homebrew/bin/lightpanda",
+      "args": ["mcp"]
+    }
+  }
+}
