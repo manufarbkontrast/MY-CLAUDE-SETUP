@@ -1,6 +1,6 @@
 # My Claude Code Setup
 
-Personal Claude Code configuration with 425 skills, 182 agents, 187 commands, 8 rules, and 9 hooks.
+Personal Claude Code configuration with 461 skills, 182 agents, 190 commands, 9 rules, and 9 hooks.
 
 ## Installation
 
@@ -20,10 +20,10 @@ cp settings.json ~/.claude/settings.json
 
 | Component | Count |
 |---|---|
-| Skills | 425 |
+| Skills | 461 |
 | Agents | 182 |
-| Commands | 187 |
-| Rules | 8 |
+| Commands | 190 |
+| Rules | 9 |
 | Hooks | 9 (in settings.json) |
 
 ## Sources

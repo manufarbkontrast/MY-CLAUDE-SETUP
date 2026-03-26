@@ -1,13 +1,38 @@
-# Prompt Optimizer
+# MY-CLAUDE-SETUP
 
-CLI tool that analyzes a raw prompt and enriches it by identifying relevant skills, agents, and commands from the my-claude-setup repository.
+Personal Claude Code configuration backup for `~/.claude/`.
+
+## Structure
+
+| Directory | Count | Purpose |
+|-----------|-------|---------|
+| `skills/` | 461 | Skill definitions (markdown + templates) |
+| `agents/` | 182 | Specialized agent definitions |
+| `commands/` | 190 | Slash commands |
+| `rules/` | 9 | Global behavior rules |
+| `settings.json` | — | Hooks, plugins, marketplace config |
+| `scripts/` | — | Prompt enhancer CLI |
+
+## Sync Workflow
+
+`~/.claude/` is the source of truth. To update this repo:
+
+```bash
+rsync -av --delete ~/.claude/skills/ ./skills/
+rsync -av --delete ~/.claude/agents/ ./agents/
+rsync -av --delete ~/.claude/commands/ ./commands/
+rsync -av --delete ~/.claude/rules/ ./rules/
+cp ~/.claude/settings.json ./settings.json
+git add -A && git commit -m "feat: sync local setup"
+git pull --rebase origin main && git push origin main
+```
 
 ## Installation (neuer Rechner)
 
 ### Schnell-Installation
 
 ```bash
-git clone https://github.com/manufarbkontrast/my-claude-setup.git ~/my-claude-setup
+git clone https://github.com/manufarbkontrast/MY-CLAUDE-SETUP.git ~/my-claude-setup
 cd ~/my-claude-setup
 ./install.sh
 ```
@@ -16,27 +41,61 @@ Das Script:
 1. Prueft Node.js >= 20
 2. Installiert Dependencies
 3. Kompiliert TypeScript
-4. Baut die Registry (444 Skills, 182 Agents, 183 Commands)
+4. Baut die Registry
 5. Registriert `prompt-optimizer` und `po` als globale CLI-Befehle
 
-### Manuelle Installation
+### Claude Setup kopieren
 
 ```bash
-git clone https://github.com/manufarbkontrast/my-claude-setup.git ~/my-claude-setup
-cd ~/my-claude-setup
-npm install
-npm run setup
-npm link
+cp -r skills/* ~/.claude/skills/
+cp -r agents/* ~/.claude/agents/
+cp -r commands/* ~/.claude/commands/
+cp -r rules/* ~/.claude/rules/
+cp settings.json ~/.claude/settings.json
 ```
 
-### Voraussetzungen
+## Hooks (in settings.json)
 
-- Node.js >= 20
-- Git
+- **PreToolUse**: Block dev server outside tmux, warn on git push, block unnecessary .md/.txt files
+- **PostToolUse**: Auto-format mit prettier, TypeScript type-check, console.log warnings, PR URL extraction
 
-## Usage
+## Enabled Plugins
 
-### Globaler CLI-Befehl (nach `npm link`)
+- engineering-skills, fullstack-engineer (claude-code-skills)
+- firecrawl, figma, superpowers (claude-plugins-official)
+- claude-hud (jarrodwatts/claude-hud)
+
+## Rules
+
+| Rule | Purpose |
+|------|---------|
+| `coding-style.md` | Immutability, small files, error handling |
+| `git-workflow.md` | Conventional commits, PR workflow |
+| `testing.md` | TDD mandatory, 80%+ coverage |
+| `performance.md` | Model selection, context management |
+| `patterns.md` | Repository pattern, API response format |
+| `hooks.md` | Hook types, TodoWrite best practices |
+| `agents.md` | Agent orchestration, parallel execution |
+| `security.md` | Security checks before commits |
+| `uncodixify.md` | Anti-AI-aesthetic UI guidelines |
+
+## Key Commands
+
+```
+/plan               — Implementation planning
+/tdd                — Test-driven development
+/verify             — Build + types + lint + tests + secrets audit
+/code-review        — Security + quality review
+/orchestrate        — Chain agents: plan → tdd → review → security
+/full-stack-feature — End-to-end backend + frontend + DB
+/smart-debug        — AI-powered debugging
+/build-fix          — Fix build errors incrementally
+/frontend-dev       — Closed-loop visual frontend testing
+```
+
+## Prompt Optimizer
+
+CLI tool that analyzes a raw prompt and enriches it by identifying relevant skills, agents, and commands.
 
 ```bash
 prompt-optimizer "Build a Shopify store with Next.js"
@@ -50,7 +109,6 @@ po --help                                          # Hilfe
 
 ```bash
 po "Dein Prompt" 2>/dev/null | pbcopy
-# Dann Cmd+V in Claude Code
 ```
 
 ### Claude Code Command
@@ -65,20 +123,7 @@ po "Dein Prompt" 2>/dev/null | pbcopy
 cd ~/my-claude-setup && git pull && po --build
 ```
 
-## How It Works
-
-1. **Registry Build** (`src/build-registry.ts`): Scans all 444 skills, 182 agents, 183 commands, 8 rules, and 9 hooks. Extracts name, description, keywords, category, and content summary into `registry.json`.
-
-2. **Prompt Analysis** (`src/optimize-prompt.ts`): Detects task type (feature-development, debugging, refactoring, etc.) and technologies (React, Shopify, Supabase, etc.) from the input prompt.
-
-3. **Matching** (`src/matcher.ts`): Uses a three-pass matching strategy:
-   - **Keyword match**: Tokenizes prompt and matches against skill keywords, names, descriptions
-   - **Direct name boost**: Skills whose name appears directly in the prompt get a significant score boost
-   - **Fuse.js fuzzy search**: Catches semantic matches that keyword matching misses
-
-4. **Output**: Generates a structured optimized prompt with skill references, agent recommendations, commands, and applicable rules.
-
-## Architecture
+### Architecture
 
 ```
 src/
@@ -89,15 +134,15 @@ src/
   optimize-prompt.ts - Prompt analysis and output assembly
 ```
 
-## Example
+## Sources
 
-Input:
-```
-Erstelle einen Shopify-Shop mit Next.js Frontend, Supabase Backend und automatisierter Produktsynchronisation
-```
-
-Output includes:
-- Skills: shopify, backend-patterns, frontend-patterns, frontend-design, frontend-dev-guidelines
-- Agent: backend-architect
-- Commands: /frontend-dev, /multi-backend, /multi-frontend
-- Rules: hooks, git-workflow, performance
+Curated from:
+- [affaan-m/everything-claude-code](https://github.com/affaan-m/everything-claude-code) — Core workflow, TDD, hooks
+- [anthropics/skills](https://github.com/anthropics/skills) — Official Anthropic skills
+- [wshobson/agents](https://github.com/wshobson/agents) — 112 agents, 146 skills, 91 commands
+- [mrgoonie/claudekit-skills](https://github.com/mrgoonie/claudekit-skills) — Shopify, payments, debugging
+- [secondsky/claude-skills](https://github.com/secondsky/claude-skills) — 176 skills (Cloudflare, Nuxt, TanStack, Bun)
+- [anthropics/claude-code](https://github.com/anthropics/claude-code) — Official frontend-design plugin
+- [kylezantos/design-motion-principles](https://github.com/kylezantos/design-motion-principles) — Motion design
+- [Dammyjay93/claude-design-skill](https://github.com/Dammyjay93/claude-design-skill) — Interface design
+- [hemangjoshi37a/claude-code-frontend-dev](https://github.com/hemangjoshi37a/claude-code-frontend-dev) — Visual testing
