@@ -64,6 +64,16 @@ cp settings.json ~/.claude/settings.json
 - engineering-skills, fullstack-engineer (claude-code-skills)
 - firecrawl, figma, superpowers (claude-plugins-official)
 - claude-hud (jarrodwatts/claude-hud)
+- claude-code-toolkit (rohitg00/awesome-claude-code-toolkit)
+- agile-workflow, codebase-audit-suite, project-bootstrap, optimization-suite, setup-environment (levnikolaevich/claude-code-skills)
+- sanctum, conjure, pensive, memory-palace, spec-kit, leyline (athola/claude-night-market)
+- security-awareness, planning-with-files, python-code-simplifier, skill-extractor, scv-scan (trailofbits/skills-curated)
+
+## MCP Servers
+
+- lightpanda — Browser-Automatisierung
+- dbhub (bytebase/dbhub) — Datenbank-MCP für Postgres, MySQL, SQLite etc.
+- linkedin (stickerdaniel/linkedin-mcp-server) — LinkedIn Profile, Companies, Jobs
 
 ## Rules
 

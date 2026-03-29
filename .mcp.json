@@ -3,6 +3,21 @@
     "lightpanda": {
       "command": "/opt/homebrew/bin/lightpanda",
       "args": ["mcp"]
+    },
+    "dbhub": {
+      "type": "stdio",
+      "command": "npx",
+      "args": [
+        "@bytebase/dbhub@latest",
+        "--transport",
+        "stdio",
+        "--dsn",
+        "${DATABASE_URL}"
+      ]
+    },
+    "linkedin": {
+      "command": "uvx",
+      "args": ["linkedin-scraper-mcp"]
     }
   }
 }

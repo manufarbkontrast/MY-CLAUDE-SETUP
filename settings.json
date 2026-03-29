@@ -102,13 +102,54 @@
     "firecrawl@claude-plugins-official": true,
     "figma@claude-plugins-official": true,
     "superpowers@claude-plugins-official": true,
-    "claude-hud@claude-hud": true
+    "claude-hud@claude-hud": true,
+    "claude-code-toolkit@awesome-claude-code-toolkit": true,
+    "agile-workflow@levnikolaevich-skills": true,
+    "codebase-audit-suite@levnikolaevich-skills": true,
+    "project-bootstrap@levnikolaevich-skills": true,
+    "optimization-suite@levnikolaevich-skills": true,
+    "setup-environment@levnikolaevich-skills": true,
+    "sanctum@claude-night-market": true,
+    "conjure@claude-night-market": true,
+    "pensive@claude-night-market": true,
+    "memory-palace@claude-night-market": true,
+    "spec-kit@claude-night-market": true,
+    "leyline@claude-night-market": true,
+    "security-awareness@skills-curated": true,
+    "planning-with-files@skills-curated": true,
+    "python-code-simplifier@skills-curated": true,
+    "skill-extractor@skills-curated": true,
+    "scv-scan@skills-curated": true
   },
   "extraKnownMarketplaces": {
     "claude-hud": {
       "source": {
         "source": "github",
         "repo": "jarrodwatts/claude-hud"
+      }
+    },
+    "awesome-claude-code-toolkit": {
+      "source": {
+        "source": "github",
+        "repo": "rohitg00/awesome-claude-code-toolkit"
+      }
+    },
+    "levnikolaevich-skills": {
+      "source": {
+        "source": "github",
+        "repo": "levnikolaevich/claude-code-skills"
+      }
+    },
+    "claude-night-market": {
+      "source": {
+        "source": "github",
+        "repo": "athola/claude-night-market"
+      }
+    },
+    "skills-curated": {
+      "source": {
+        "source": "github",
+        "repo": "trailofbits/skills-curated"
       }
     }
   }
