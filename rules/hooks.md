@@ -6,6 +6,43 @@
 - **PostToolUse**: After tool execution (auto-format, checks)
 - **Stop**: When session ends (final verification)
 
+## Conditional Hooks (`if` Field)
+
+Since Claude Code v2.1.85: Das `if`-Feld filtert Hook-Ausführung **vor** dem Prozess-Spawning.
+Verwendet Permission-Rule-Syntax als Pre-Filter, `matcher` bleibt für detaillierte Bedingungen.
+
+### Syntax
+
+```json
+{
+  "matcher": "tool == \"Bash\" && tool_input.command matches \"git push\"",
+  "if": "Bash(git push*)",
+  "hooks": [{ "type": "command", "command": "..." }]
+}
+```
+
+### Unterstützte Patterns
+
+| Pattern | Beschreibung |
+|---------|-------------|
+| `Bash(git *)` | Bash-Befehle die mit "git " starten |
+| `Bash(*build*)` | Bash-Befehle die "build" enthalten |
+| `Edit(*.ts)` | Edits an TypeScript-Dateien |
+| `Write(*.md)` | Schreibzugriffe auf Markdown-Dateien |
+| `Read(src/*)` | Lesezugriffe im src-Verzeichnis |
+
+### Kombination mit `||`
+
+```json
+"if": "Edit(*.ts) || Edit(*.tsx) || Edit(*.js) || Edit(*.jsx)"
+```
+
+### Vorteile
+
+- **Performance**: Kein Prozess-Spawning wenn `if` nicht matcht
+- **Effizienz**: `matcher` wird nur evaluiert wenn `if` zutrifft
+- **Kompatibilität**: `if` ist optional, bestehende Hooks funktionieren weiterhin
+
 ## Auto-Accept Permissions
 
 Use with caution:
