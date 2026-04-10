@@ -74,6 +74,7 @@ cp settings.json ~/.claude/settings.json
 - lightpanda — Browser-Automatisierung
 - dbhub (bytebase/dbhub) — Datenbank-MCP für Postgres, MySQL, SQLite etc.
 - linkedin (stickerdaniel/linkedin-mcp-server) — LinkedIn Profile, Companies, Jobs
+- mempalace (milla-jovovich/mempalace) — Lokales AI-Memory-System mit Knowledge Graph, 23 MCP-Tools
 
 ## Rules
 

@@ -1,4 +1,10 @@
 {
+  "mcpServers": {
+    "mempalace": {
+      "command": "python",
+      "args": ["-m", "mempalace.mcp_server"]
+    }
+  },
   "hooks": {
     "PreToolUse": [
       {
