@@ -6,7 +6,7 @@ Personal Claude Code configuration backup for `~/.claude/`.
 
 | Directory | Count | Purpose |
 |-----------|-------|---------|
-| `skills/` | 453 | Skill definitions (markdown + templates) |
+| `skills/` | 455 | Skill definitions (markdown + templates) |
 | `agents/` | 182 | Specialized agent definitions |
 | `commands/` | 192 | Slash commands |
 | `rules/` | 9 | Global behavior rules |
@@ -23,6 +23,7 @@ rsync -av --delete ~/.claude/agents/ ./agents/
 rsync -av --delete ~/.claude/commands/ ./commands/
 rsync -av --delete ~/.claude/rules/ ./rules/
 cp ~/.claude/settings.json ./settings.json
+cp ~/.claude/.mcp.json ./.mcp.json   # MCP-Server (oder mcpServers aus ~/.claude.json übernehmen)
 git add -A && git commit -m "feat: sync local setup"
 git pull --rebase origin main && git push origin main
 ```
@@ -52,6 +53,7 @@ cp -r agents/* ~/.claude/agents/
 cp -r commands/* ~/.claude/commands/
 cp -r rules/* ~/.claude/rules/
 cp settings.json ~/.claude/settings.json
+cp .mcp.json ~/.claude/.mcp.json   # bzw. mcpServers in ~/.claude.json mergen
 ```
 
 ## Hooks (in settings.json)
@@ -68,12 +70,17 @@ cp settings.json ~/.claude/settings.json
 - agile-workflow, codebase-audit-suite, project-bootstrap, optimization-suite, setup-environment (levnikolaevich/claude-code-skills)
 - sanctum, conjure, pensive, memory-palace, spec-kit, leyline (athola/claude-night-market)
 - security-awareness, planning-with-files, python-code-simplifier, skill-extractor, scv-scan (trailofbits/skills-curated)
+- plannotator (backnotprop/plannotator) — Visuelles Plan-/Diff-Annotieren (Browser-UI, `/plannotator-review`)
 
 ## MCP Servers
+
+Konfiguriert in `.mcp.json`. Hinweis: Claude Code liest user-scope MCP aus `~/.claude.json` — beim Einrichten auf einem neuen Rechner die `mcpServers` aus `.mcp.json` dorthin übernehmen (oder `.mcp.json` ins Projekt-Root legen für projekt-scope).
 
 - lightpanda — Browser-Automatisierung
 - dbhub (bytebase/dbhub) — Datenbank-MCP für Postgres, MySQL, SQLite etc.
 - linkedin (stickerdaniel/linkedin-mcp-server) — LinkedIn Profile, Companies, Jobs
+- codegraph (colbymchenry/codegraph) — Vorindexierter Code-Graph (stdio). Pro Projekt: `codegraph init -i`
+- presenton (presenton/presenton) — AI-Präsentationsgenerator (Streamable HTTP, `http://localhost:5000/mcp`, Docker erforderlich)
 
 ## Rules
 

@@ -18,6 +18,15 @@
     "linkedin": {
       "command": "uvx",
       "args": ["linkedin-scraper-mcp"]
+    },
+    "codegraph": {
+      "type": "stdio",
+      "command": "codegraph",
+      "args": ["serve", "--mcp"]
+    },
+    "presenton": {
+      "type": "http",
+      "url": "http://localhost:5000/mcp"
     }
   }
 }

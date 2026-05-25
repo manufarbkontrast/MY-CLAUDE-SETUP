@@ -119,9 +119,16 @@
     "planning-with-files@skills-curated": true,
     "python-code-simplifier@skills-curated": true,
     "skill-extractor@skills-curated": true,
-    "scv-scan@skills-curated": true
+    "scv-scan@skills-curated": true,
+    "plannotator@plannotator": true
   },
   "extraKnownMarketplaces": {
+    "plannotator": {
+      "source": {
+        "source": "github",
+        "repo": "backnotprop/plannotator"
+      }
+    },
     "claude-hud": {
       "source": {
         "source": "github",
