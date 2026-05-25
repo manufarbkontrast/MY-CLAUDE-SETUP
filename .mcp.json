@@ -27,6 +27,16 @@
     "presenton": {
       "type": "http",
       "url": "http://localhost:5001/mcp"
+    },
+    "email": {
+      "command": "uvx",
+      "args": ["mcp-email-server@latest", "stdio"],
+      "env": {
+        "MCP_EMAIL_SERVER_EMAIL_ADDRESS": "${EMAIL_ADDRESS}",
+        "MCP_EMAIL_SERVER_PASSWORD": "${EMAIL_PASSWORD}",
+        "MCP_EMAIL_SERVER_IMAP_HOST": "${EMAIL_IMAP_HOST}",
+        "MCP_EMAIL_SERVER_SMTP_HOST": "${EMAIL_SMTP_HOST}"
+      }
     }
   }
 }
