@@ -80,7 +80,7 @@ Konfiguriert in `.mcp.json`. Hinweis: Claude Code liest user-scope MCP aus `~/.c
 - dbhub (bytebase/dbhub) — Datenbank-MCP für Postgres, MySQL, SQLite etc.
 - linkedin (stickerdaniel/linkedin-mcp-server) — LinkedIn Profile, Companies, Jobs
 - codegraph (colbymchenry/codegraph) — Vorindexierter Code-Graph (stdio). Pro Projekt: `codegraph init -i`
-- presenton (presenton/presenton) — AI-Präsentationsgenerator (Streamable HTTP, `http://localhost:5000/mcp`, Docker erforderlich)
+- presenton (presenton/presenton) — AI-Präsentationsgenerator (Streamable HTTP, `http://localhost:5001/mcp`, Docker erforderlich; Port 5000 kollidiert mit macOS AirPlay)
 
 ## Rules
 
