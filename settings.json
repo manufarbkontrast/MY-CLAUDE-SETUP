@@ -120,9 +120,18 @@
     "python-code-simplifier@skills-curated": true,
     "skill-extractor@skills-curated": true,
     "scv-scan@skills-curated": true,
-    "claude-seo@agricidaniel-claude-seo": true
+    "claude-seo@agricidaniel-claude-seo": true,
+    "marketing-skills@claude-code-skills": true,
+    "engineering-advanced-skills@claude-code-skills": true,
+    "product-skills@claude-code-skills": true
   },
   "extraKnownMarketplaces": {
+    "claude-code-skills": {
+      "source": {
+        "source": "github",
+        "repo": "alirezarezvani/claude-skills"
+      }
+    },
     "claude-hud": {
       "source": {
         "source": "github",
