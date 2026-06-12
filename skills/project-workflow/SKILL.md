@@ -1,12 +1,9 @@
 ---
 name: project-workflow
-description: Project lifecycle automation with 7 slash commands. Use for idea exploration, project planning, session management, safe releases, or encountering /explore-idea, /plan-project, /plan-feature, /continue-session, /wrap-session, /release, /workflow command errors.
-
-  Keywords: project workflow, lifecycle automation, slash commands, planning, session management, release safety, implementation phases
+description: 'Project lifecycle automation with 7 slash commands. Use for idea exploration, project planning, session management, safe releases, or encountering /explore-idea, /plan-project, /plan-feature, /continue-session, /wrap-session, /release, /workflow command errors. Keywords: project workflow, lifecycle automation, slash commands, planning, session management, release safety, implementation phases'
 license: MIT
 allowed-tools: ["Read", "Write", "Edit", "Bash"]
 ---
-
 # Project Workflow Skill
 
 **Complete project lifecycle automation for Claude Code**

@@ -146,3 +146,136 @@ ffmpeg -i out/video only.mp4 ...    # Falsch
 - Hauptvideo (~590s, 17.700 Frames): ~5-10 Minuten
 - Pro Short (~60s, 1.800 Frames): ~1-2 Minuten
 - Tipp: `--concurrency` Flag fuer paralleles Rendern (Standard: auto)
+
+---
+
+## Chunked Render (bei wenig Disk-Space)
+
+Remotion schreibt intermediate JPEG-Frames in `/tmp` bevor ffmpeg encodiert. Ein 10-min 1080p Video braucht dabei leicht **2-3 GB Temp-Space**. Bei weniger als 8-10 GB frei: chunked rendering verwenden.
+
+### Strategie
+
+1. Video in N gleich grosse Chunks aufteilen via `--frames=START-END`
+2. Jeden Chunk einzeln rendern → `out/chunks/part-NN.mp4`
+3. Mit ffmpeg concat-demuxer konkatenieren (stream copy, kein Re-Encode)
+4. Original-Audio muxen wie gewohnt
+
+Faustregel: **8 Chunks** sind ein guter Default. Jeder Chunk braucht ~`TOTAL_FRAMES/8 × ~150KB` Peak-Temp.
+
+### Render-Script (`scripts/renderChunks.sh`)
+
+```bash
+#!/usr/bin/env bash
+# Renders the video in chunks to keep peak temp-disk usage low,
+# then concatenates with ffmpeg (stream copy, no re-encode).
+set -euo pipefail
+
+cd "$(dirname "$0")/.."
+
+TOTAL=19540    # totalFrames from videoConfig
+CHUNKS=8
+CHUNK_SIZE=$(( (TOTAL + CHUNKS - 1) / CHUNKS ))
+
+mkdir -p out/chunks
+> out/chunks/concat.txt
+
+for i in $(seq 0 $((CHUNKS - 1))); do
+  START=$(( i * CHUNK_SIZE ))
+  END=$(( START + CHUNK_SIZE - 1 ))
+  if [ "$END" -ge "$TOTAL" ]; then
+    END=$(( TOTAL - 1 ))
+  fi
+  OUT="out/chunks/part-$(printf '%02d' "$i").mp4"
+  echo "=== Chunk $i: frames $START..$END -> $OUT ==="
+  npx remotion render src/index.ts MainVideo "$OUT" \
+    --codec h264 \
+    --muted \
+    --frames="$START-$END"
+  # WICHTIG: relativer Pfad in concat.txt (ohne 'chunks/' prefix)
+  # weil wir unten ins chunks-Verzeichnis cd-en
+  echo "file 'part-$(printf '%02d' "$i").mp4'" >> out/chunks/concat.txt
+done
+
+echo "=== Concatenating ==="
+# KRITISCH: ffmpeg concat-demuxer interpretiert Pfade RELATIV ZUR concat.txt,
+# nicht zum cwd. Daher ins chunks-Verzeichnis cd-en.
+(cd out/chunks && ffmpeg -y -f concat -safe 0 -i concat.txt -c copy ../video-only.mp4)
+echo "Done: out/video-only.mp4"
+```
+
+### Wenn ein Chunk trotzdem ENOSPC wirft
+
+Die letzten/groesseren Chunks kann man nochmal halbieren:
+
+```bash
+# Statt part-07.mp4 rendern, zwei Sub-Chunks
+npx remotion render src/index.ts MainVideo out/chunks/part-07a.mp4 --codec h264 --muted --frames=17093-18316
+npx remotion render src/index.ts MainVideo out/chunks/part-07b.mp4 --codec h264 --muted --frames=18317-19539
+
+# concat.txt dann entsprechend erweitern
+```
+
+### Disk-Budget Cheatsheet
+
+| Total-Frames | Chunks | Peak-Temp/Chunk | Gesamt frei noetig |
+|-------------:|-------:|----------------:|-------------------:|
+| ~5k          | 1      | ~0.8 GB         | ~2 GB              |
+| ~10k         | 4      | ~0.4 GB         | ~1.5 GB            |
+| ~20k         | 8      | ~0.4 GB         | ~2 GB + Output     |
+| ~20k         | 5      | ~0.8 GB         | ~2.5 GB + Output   |
+| ~30k         | 10     | ~0.5 GB         | ~3 GB + Output     |
+
+Output-File selbst: ca. 80-90 MB pro Minute 1080p h264.
+
+---
+
+## Kritische Gotchas
+
+### 1. Niemals Render-Output durch `| head` pipen
+
+```bash
+# FALSCH: head schliesst die Pipe nach 80 Zeilen → SIGPIPE killt Remotion
+npx remotion render ... | tee /tmp/log | head -80
+
+# RICHTIG: nohup + disown, Log in Datei
+nohup npx remotion render ... > /tmp/render.log 2>&1 &
+disown
+```
+
+### 2. ffmpeg concat-demuxer Pfade sind relativ zur `concat.txt`
+
+```bash
+# FALSCH: wenn concat.txt in out/chunks/ und ffmpeg aus cwd ausgefuehrt wird
+cat > out/chunks/concat.txt <<EOF
+file 'chunks/part-00.mp4'
+EOF
+ffmpeg -f concat -safe 0 -i out/chunks/concat.txt -c copy out/video-only.mp4
+# → sucht 'out/chunks/chunks/part-00.mp4' (doppelter prefix)
+
+# RICHTIG: entweder cd-en
+(cd out/chunks && ffmpeg -f concat -safe 0 -i concat.txt -c copy ../video-only.mp4)
+# oder absolute Pfade in concat.txt verwenden
+```
+
+### 3. `cp` vs `mv` bei fast vollem Disk
+
+Bei wenig Disk-Space: der finale Output kann den Rest fuellen. Cleanup VOR dem Verschieben:
+
+```bash
+# FALSCH: cp dupliziert, kann ENOSPC werfen und truncated File hinterlassen
+cp out/final.mp4 /target/final.mp4
+
+# RICHTIG: zuerst aufraumen, dann mv (atomar, nur Rename innerhalb FS)
+rm -rf out/chunks out/video-only.mp4
+mv out/final.mp4 /target/final.mp4
+```
+
+`mv` innerhalb desselben Filesystems ist nur ein inode-rename — funktioniert auch bei 0 B free. Cross-FS `mv` wird zu copy+delete und kann dann wieder ENOSPC werfen.
+
+### 4. Disk-Space vor Start pruefen
+
+```bash
+df -h /
+# Wenn < 10 GB free bei 10-min 1080p → chunked rendering
+# Wenn < 5 GB free → mindestens 8 chunks, ggf. 10-12
+```

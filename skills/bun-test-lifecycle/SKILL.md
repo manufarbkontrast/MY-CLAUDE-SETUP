@@ -1,9 +1,8 @@
 ---
 name: Bun Test Lifecycle
-description: Use for test lifecycle hooks: beforeAll, afterAll, beforeEach, afterEach, fixtures, preload.
+description: 'Use for test lifecycle hooks: beforeAll, afterAll, beforeEach, afterEach, fixtures, preload.'
 version: 1.0.0
 ---
-
 # Bun Test Lifecycle
 
 Bun supports Jest-compatible lifecycle hooks for test setup and teardown.

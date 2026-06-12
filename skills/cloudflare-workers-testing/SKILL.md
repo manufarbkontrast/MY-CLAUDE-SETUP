@@ -20,7 +20,7 @@ keywords:
   - test-coverage
   - test-failures
   - mock-errors
-  - @cloudflare/vitest-pool-workers
+  - "@cloudflare/vitest-pool-workers"
   - cloudflare:test
   - env-mocking
   - execution-context

@@ -1,11 +1,8 @@
 ---
 name: clerk-auth
-description: Clerk authentication for React, Next.js, Cloudflare Workers. Use for auth setup, protected routes, JWT verification/templates, clerkMiddleware, shadcn/ui integration, testing flows, or encountering secret key errors, JWKS cache issues, JWT size limits, CSRF vulnerabilities.
-
-  Keywords: clerk, clerk auth, clerk authentication, @clerk/nextjs, @clerk/backend, @clerk/clerk-react, clerkMiddleware, createRouteMatcher, verifyToken, useUser, useAuth, useClerk, JWT template, JWT claims, JWT shortcodes, custom JWT, session claims, getToken template, user.public_metadata, org_id, org_slug, org_role, CustomJwtSessionClaims, sessionClaims metadata, clerk webhook, clerk secret key, clerk publishable key, protected routes, Cloudflare Workers auth, Next.js auth, shadcn/ui auth, @hono/clerk-auth, "Missing Clerk Secret Key", "cannot be used as a JSX component", JWKS error, authorizedParties, clerk middleware, ClerkProvider, UserButton, SignIn, SignUp, clerk testing, test emails, test phone numbers, +clerk_test, 424242 OTP, session token, testing token, @clerk/testing, playwright testing, E2E testing, clerk test mode, bot detection, generate session token, test users
+description: 'Clerk authentication for React, Next.js, Cloudflare Workers. Use for auth setup, protected routes, JWT verification/templates, clerkMiddleware, shadcn/ui integration, testing flows, or encountering secret key errors, JWKS cache issues, JWT size limits, CSRF vulnerabilities. Keywords: clerk, clerk auth, clerk authentication, @clerk/nextjs, @clerk/backend, @clerk/clerk-react, clerkMiddleware, createRouteMatcher, verifyToken, useUser, useAuth, useClerk, JWT template, JWT claims, JWT shortcodes, custom JWT, session claims, getToken template, user.public_metadata, org_id, org_slug, org_role, CustomJwtSessionClaims, sessionClaims metadata, clerk webhook, clerk secret key, clerk publishable key, protected routes, Cloudflare Workers auth, Next.js auth, shadcn/ui auth, @hono/clerk-auth, "Missing Clerk Secret Key", "cannot be used as a JSX component", JWKS error, authorizedParties, clerk middleware, ClerkProvider, UserButton, SignIn, SignUp, clerk testing, test emails, test phone numbers, +clerk_test, 424242 OTP, session token, testing token, @clerk/testing, playwright testing, E2E testing, clerk test mode, bot detection, generate session token, test users'
 license: MIT
 ---
-
 # Clerk Authentication
 
 **Status**: Production Ready ✅

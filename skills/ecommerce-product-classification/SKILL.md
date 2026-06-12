@@ -1,11 +1,8 @@
 ---
 name: ecommerce-product-classification
-description: Hierarchical keyword-based product classification with default fallbacks for 100% coverage. Maps broad supplier categories to specific marketplace sub-categories with multi-language support and color normalization.
-
-  Keywords: ecommerce, product classification, category mapping, keyword rules, zalando, amazon, marketplace, taxonomy, color normalization, product feed, multi-language, product categorization
+description: 'Hierarchical keyword-based product classification with default fallbacks for 100% coverage. Maps broad supplier categories to specific marketplace sub-categories with multi-language support and color normalization. Keywords: ecommerce, product classification, category mapping, keyword rules, zalando, amazon, marketplace, taxonomy, color normalization, product feed, multi-language, product categorization'
 license: MIT
 ---
-
 # E-Commerce Product Classification with Keyword Rules
 
 **Status**: Production Ready

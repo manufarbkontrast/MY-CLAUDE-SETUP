@@ -1,8 +1,6 @@
 ---
 name: open-source-contributions
-description: Open source contribution best practices with PR validation scripts. Use for pull requests, community contributions, or encountering personal artifacts in PRs, working on main branch, untested submissions, unrelated changes, unfocused PRs.
-
-  Keywords: open source contributions, github pull request, PR best practices, contribution guidelines, feature branch workflow, PR description, commit messages, open source etiquette, maintainer-friendly PR, PR checklist, clean PR, avoid personal artifacts, session notes cleanup, planning docs cleanup, test before PR, unrelated changes, working on main branch, focused PR, single feature PR, professional communication, community contributions, public repository contributions, fork workflow, upstream sync
+description: 'Open source contribution best practices with PR validation scripts. Use for pull requests, community contributions, or encountering personal artifacts in PRs, working on main branch, untested submissions, unrelated changes, unfocused PRs. Keywords: open source contributions, github pull request, PR best practices, contribution guidelines, feature branch workflow, PR description, commit messages, open source etiquette, maintainer-friendly PR, PR checklist, clean PR, avoid personal artifacts, session notes cleanup, planning docs cleanup, test before PR, unrelated changes, working on main branch, focused PR, single feature PR, professional communication, community contributions, public repository contributions, fork workflow, upstream sync'
 license: MIT
 metadata:
   version: "2.0.0"
@@ -13,7 +11,6 @@ metadata:
   templates_included: 4
   references_included: 3
 ---
-
 # Open Source Contributions Skill
 
 **Version**: 2.0.0 | **Last Verified**: 2025-11-18 | **Production Tested**: ✅

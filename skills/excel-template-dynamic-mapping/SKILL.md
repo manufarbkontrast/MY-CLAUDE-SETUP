@@ -1,11 +1,8 @@
 ---
 name: excel-template-dynamic-mapping
-description: Write data to multi-sheet Excel templates with dynamic column mapping from header rows. Handles fixed N-row headers, stale data clearing, and different column layouts per sheet.
-
-  Keywords: excel, openpyxl, template, column mapping, multi-sheet, header rows, product feed, zalando, amazon, inventory export, etl, xlsx, spreadsheet
+description: 'Write data to multi-sheet Excel templates with dynamic column mapping from header rows. Handles fixed N-row headers, stale data clearing, and different column layouts per sheet. Keywords: excel, openpyxl, template, column mapping, multi-sheet, header rows, product feed, zalando, amazon, inventory export, etl, xlsx, spreadsheet'
 license: MIT
 ---
-
 # Excel Template Dynamic Column Mapping
 
 **Status**: Production Ready

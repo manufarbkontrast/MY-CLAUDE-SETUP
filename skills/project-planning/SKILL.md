@@ -1,8 +1,6 @@
 ---
 name: project-planning
-description: Generate planning docs (IMPLEMENTATION_PHASES.md, DATABASE_SCHEMA.md, API_ENDPOINTS.md, ARCHITECTURE.md) for web projects. Use for new projects, major features, or phased development with Cloudflare Workers + Vite + React.
-
-  Keywords: project planning, planning documentation, IMPLEMENTATION_PHASES.md, DATABASE_SCHEMA.md, API_ENDPOINTS.md, ARCHITECTURE.md, UI_COMPONENTS.md, TESTING.md, AGENTS_CONFIG.md, phased development, context-safe phases, verification criteria, exit criteria, planning docs generator, web app planning, Cloudflare Workers planning, Vite React planning, project structure, project phases, major features planning, new project setup
+description: 'Generate planning docs (IMPLEMENTATION_PHASES.md, DATABASE_SCHEMA.md, API_ENDPOINTS.md, ARCHITECTURE.md) for web projects. Use for new projects, major features, or phased development with Cloudflare Workers + Vite + React. Keywords: project planning, planning documentation, IMPLEMENTATION_PHASES.md, DATABASE_SCHEMA.md, API_ENDPOINTS.md, ARCHITECTURE.md, UI_COMPONENTS.md, TESTING.md, AGENTS_CONFIG.md, phased development, context-safe phases, verification criteria, exit criteria, planning docs generator, web app planning, Cloudflare Workers planning, Vite React planning, project structure, project phases, major features planning, new project setup'
 license: MIT
 metadata:
   version: 2.0.0
@@ -12,7 +10,6 @@ metadata:
   token_savings: ~65%
   errors_prevented: 5
 ---
-
 # Project Planning Skill
 
 **Status**: Production Ready

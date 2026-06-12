@@ -1,11 +1,6 @@
 ---
 name: cloudflare-full-stack-scaffold
-description: Production React + Cloudflare Workers + Hono starter with D1, KV, R2, Workers AI. Use for full-stack projects, MVPs, AI apps on Cloudflare.
-
-  Keywords: cloudflare scaffold, full-stack starter, react cloudflare, hono template, production boilerplate,
-  AI SDK integration, workers AI, complete starter project, D1 KV R2 setup, web app template,
-  chat application scaffold, RAG starter, planning docs included, session handoff,
-  tailwind v4 shadcn, typescript starter, vite cloudflare plugin, all services configured
+description: 'Production React + Cloudflare Workers + Hono starter with D1, KV, R2, Workers AI. Use for full-stack projects, MVPs, AI apps on Cloudflare. Keywords: cloudflare scaffold, full-stack starter, react cloudflare, hono template, production boilerplate, AI SDK integration, workers AI, complete starter project, D1 KV R2 setup, web app template, chat application scaffold, RAG starter, planning docs included, session handoff, tailwind v4 shadcn, typescript starter, vite cloudflare plugin, all services configured'
 license: MIT
 metadata:
   version: 1.1.0
@@ -33,7 +28,6 @@ metadata:
     total_reference_lines: 3043
     reduction_achieved: "55% (773 → 345 lines)"
 ---
-
 # Cloudflare Full-Stack Scaffold
 
 Complete, production-ready starter project for building full-stack applications on Cloudflare with React, Hono, AI SDK, and all Cloudflare services pre-configured.

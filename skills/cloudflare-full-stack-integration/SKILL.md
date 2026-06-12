@@ -1,10 +1,6 @@
 ---
 name: cloudflare-full-stack-integration
-description: React-to-Cloudflare Workers integration patterns with Hono, Clerk, D1. Use for frontend-backend connection, auth flow, or encountering CORS, 401 errors, token mismatches, race conditions.
-
-  Keywords: frontend backend integration, Cloudflare Workers, Hono, Clerk auth, JWT verification, CORS, React API client,
-  race conditions, auth loading, connection issues, full-stack integration, vite plugin, @cloudflare/vite-plugin,
-  D1 database, environment variables, token attachment, session management, protected routes, API middleware
+description: 'React-to-Cloudflare Workers integration patterns with Hono, Clerk, D1. Use for frontend-backend connection, auth flow, or encountering CORS, 401 errors, token mismatches, race conditions. Keywords: frontend backend integration, Cloudflare Workers, Hono, Clerk auth, JWT verification, CORS, React API client, race conditions, auth loading, connection issues, full-stack integration, vite plugin, @cloudflare/vite-plugin, D1 database, environment variables, token attachment, session management, protected routes, API middleware'
 license: MIT
 metadata:
   version: 1.0.0
@@ -19,7 +15,6 @@ metadata:
   token_savings: "60-70%"
   errors_prevented: "6+ common integration errors"
 ---
-
 # Cloudflare Full-Stack Integration Patterns
 
 Production-tested patterns for React + Cloudflare Workers + Hono + Clerk authentication.

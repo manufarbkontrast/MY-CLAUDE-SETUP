@@ -43,6 +43,28 @@ Beispiele:
 - `scene-1-1770888510392.png` → Scene 1, Timestamp 1770888510392
 - `scene-0-1770888412345.png` → Scene 0, Timestamp 1770888412345
 
+### scene-0 Filter (WICHTIG)
+
+Oft gibt es `scene-0-*.png` Dateien in den Phase-Ordnern. Das sind typischerweise Draft/Intro-Bilder die der Generator produziert hat, die aber NICHT im finalen Skript vorkommen (Skripte beginnen meist bei `[scene 1]`).
+
+**Vor dem Parsing pruefen:**
+```bash
+for p in Phase_*; do
+  echo "=== $p ==="
+  ls "$p" | grep "^scene-0-" || echo "  keine scene-0 Dateien"
+done
+```
+
+Wenn scene-0 Dateien existieren und das Skript bei scene 1 startet: im Parser filtern:
+
+```typescript
+const sceneNumber = parseInt(match[1], 10);
+// Skip scene-0 drafts (script is 1-indexed)
+if (sceneNumber === 0) continue;
+```
+
+Symptom wenn vergessen: Video hat am Anfang jeder Phase 1-2 "fremde" Bilder die nicht zum gesprochenen Text passen. User wird sich beschweren. IMMER filtern wenn unklar.
+
 ### Deduplizierung
 
 Bei mehreren Bildern mit gleicher Scene-Nummer:

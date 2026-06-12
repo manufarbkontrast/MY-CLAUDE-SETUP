@@ -1,17 +1,8 @@
 ---
 name: cloudflare-worker-base
-description: Cloudflare Workers with Hono, Vite, Static Assets. Use for new projects, deployment, or encountering export errors, routing conflicts, HMR crashes.
-
-  Keywords: Cloudflare Workers, CF Workers, Hono, wrangler, Vite, Static Assets, @cloudflare/vite-plugin,
-  wrangler.jsonc, ES Module, run_worker_first, SPA fallback, API routes, edge computing,
-  "Cannot read properties of undefined", "Static Assets 404", "A hanging Promise was canceled",
-  "Handler does not export", deployment fails, routing not working, HMR crashes, hot-module-replacement,
-  scheduled-handlers, cron-triggers, environment-variables, bindings, wrangler-dev, local-development,
-  module-workers, fetch-handler, service-worker-format, bindings-configuration, environment-secrets,
-  wrangler-toml, TypeScript-workers, edge-runtime, serverless-functions
+description: 'Cloudflare Workers with Hono, Vite, Static Assets. Use for new projects, deployment, or encountering export errors, routing conflicts, HMR crashes. Keywords: Cloudflare Workers, CF Workers, Hono, wrangler, Vite, Static Assets, @cloudflare/vite-plugin, wrangler.jsonc, ES Module, run_worker_first, SPA fallback, API routes, edge computing, "Cannot read properties of undefined", "Static Assets 404", "A hanging Promise was canceled", "Handler does not export", deployment fails, routing not working, HMR crashes, hot-module-replacement, scheduled-handlers, cron-triggers, environment-variables, bindings, wrangler-dev, local-development, module-workers, fetch-handler, service-worker-format, bindings-configuration, environment-secrets, wrangler-toml, TypeScript-workers, edge-runtime, serverless-functions'
 license: MIT
 ---
-
 # Cloudflare Worker Base Stack
 
 **Production-tested**: cloudflare-worker-base-test (https://cloudflare-worker-base-test.webfonts.workers.dev)

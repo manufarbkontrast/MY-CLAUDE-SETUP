@@ -1,11 +1,8 @@
 ---
 name: web-research-enrichment-pipeline
-description: Resilient web research pipeline using firecrawl_search for product data enrichment. Uses JSON intermediate storage for resumability and 3-level merge strategy (source → research → fallback).
-
-  Keywords: web research, firecrawl, product enrichment, data pipeline, json cache, merge strategy, marketplace, zalando, product descriptions, material composition, etl, rate limiting
+description: 'Resilient web research pipeline using firecrawl_search for product data enrichment. Uses JSON intermediate storage for resumability and 3-level merge strategy (source → research → fallback). Keywords: web research, firecrawl, product enrichment, data pipeline, json cache, merge strategy, marketplace, zalando, product descriptions, material composition, etl, rate limiting'
 license: MIT
 ---
-
 # Web Research Enrichment Pipeline
 
 **Status**: Production Ready
