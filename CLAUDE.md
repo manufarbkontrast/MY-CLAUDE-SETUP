@@ -6,7 +6,7 @@ Personal Claude Code configuration backup for `~/.claude/`.
 
 | Directory | Count | Purpose |
 |-----------|-------|---------|
-| `skills/` | 453 | Skill definitions (markdown + templates) |
+| `skills/` | 465 | Skill definitions (markdown + templates) |
 | `agents/` | 182 | Specialized agent definitions |
 | `commands/` | 190 | Slash commands |
 | `rules/` | 9 | Global behavior rules |
@@ -68,12 +68,33 @@ cp settings.json ~/.claude/settings.json
 - agile-workflow, codebase-audit-suite, project-bootstrap, optimization-suite, setup-environment (levnikolaevich/claude-code-skills)
 - sanctum, conjure, pensive, memory-palace, spec-kit, leyline (athola/claude-night-market)
 - security-awareness, planning-with-files, python-code-simplifier, skill-extractor, scv-scan (trailofbits/skills-curated)
+- claude-seo (AgriciDaniel/claude-seo) — 25 SEO-Sub-Skills + 18 Agents: technisches Audit mit Headless-Rendering, Schema-Validierung, E-Commerce-SEO, hreflang, GEO/AEO
 
 ## MCP Servers
 
 - lightpanda — Browser-Automatisierung
 - dbhub (bytebase/dbhub) — Datenbank-MCP für Postgres, MySQL, SQLite etc.
 - linkedin (stickerdaniel/linkedin-mcp-server) — LinkedIn Profile, Companies, Jobs
+- gsc-mcp (mikusnuz/gsc-mcp) — Google Search Console: Clicks/Impressions/Positionen, URL-Inspektion, Sitemaps, Indexing API. Setup siehe SEO-Setup.
+
+## SEO-Setup
+
+Neue SEO-Skills (Juni 2026, kuratiert aus claudemarketplaces.com / mcpfind.org / discoveraiskills.com):
+
+| Skill | Quelle | Zweck |
+|-------|--------|-------|
+| `programmatic-seo` | coreyhaines31/marketingskills | Template-Pages mit Daten skalieren (generateStaticParams, Shopify-Kategorien) |
+| `ai-seo` | coreyhaines31/marketingskills | LLM-Zitierbarkeit, AI-Search-Optimierung (ChatGPT/Perplexity/AI Overviews) |
+| `competitors` | coreyhaines31/marketingskills | Vergleichs-/Alternative-Seiten für E-Commerce |
+| `ecommerce-seo-audit` | affilino/ecommerce-seo-audit-skill | Shopify-Audits: Produkt-/Collection-Pages, Facetten-Duplikate, Thin Categories |
+
+Dazu: claude-seo-Plugin (siehe Enabled Plugins) und der `firecrawl-seo-audit`-Workflow im bereits installierten Firecrawl-Plugin.
+
+GSC-MCP einrichten (kostenlos, braucht Google-Cloud-Service-Account mit Zugriff auf die GSC-Property):
+
+```bash
+claude mcp add gsc-mcp --env GSC_SERVICE_ACCOUNT_KEY_PATH=/pfad/zu/service-account-key.json -- npx -y @mikusnuz/gsc-mcp
+```
 
 ## Rules
 
@@ -156,3 +177,6 @@ Curated from:
 - [kylezantos/design-motion-principles](https://github.com/kylezantos/design-motion-principles) — Motion design
 - [Dammyjay93/claude-design-skill](https://github.com/Dammyjay93/claude-design-skill) — Interface design
 - [hemangjoshi37a/claude-code-frontend-dev](https://github.com/hemangjoshi37a/claude-code-frontend-dev) — Visual testing
+- [coreyhaines31/marketingskills](https://github.com/coreyhaines31/marketingskills) — programmatic-seo, ai-seo, competitors
+- [affilino/ecommerce-seo-audit-skill](https://github.com/affilino/ecommerce-seo-audit-skill) — Shopify-SEO-Audits
+- [AgriciDaniel/claude-seo](https://github.com/AgriciDaniel/claude-seo) — SEO-Plugin (via Marketplace)

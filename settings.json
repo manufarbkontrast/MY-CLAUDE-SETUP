@@ -119,7 +119,8 @@
     "planning-with-files@skills-curated": true,
     "python-code-simplifier@skills-curated": true,
     "skill-extractor@skills-curated": true,
-    "scv-scan@skills-curated": true
+    "scv-scan@skills-curated": true,
+    "claude-seo@agricidaniel-claude-seo": true
   },
   "extraKnownMarketplaces": {
     "claude-hud": {
@@ -150,6 +151,12 @@
       "source": {
         "source": "github",
         "repo": "trailofbits/skills-curated"
+      }
+    },
+    "agricidaniel-claude-seo": {
+      "source": {
+        "source": "github",
+        "repo": "AgriciDaniel/claude-seo"
       }
     }
   }
