@@ -76,6 +76,20 @@ cp settings.json ~/.claude/settings.json
 - dbhub (bytebase/dbhub) — Datenbank-MCP für Postgres, MySQL, SQLite etc.
 - linkedin (stickerdaniel/linkedin-mcp-server) — LinkedIn Profile, Companies, Jobs
 - gsc-mcp (mikusnuz/gsc-mcp) — Google Search Console: Clicks/Impressions/Positionen, URL-Inspektion, Sitemaps, Indexing API. Setup siehe SEO-Setup.
+- codebase-memory-mcp (DeusData/codebase-memory-mcp) — Code-Intelligence: indexiert Repos in einen Knowledge-Graph (158 Sprachen via tree-sitter, Call-Graph, Dead-Code, Impact-Mapping), ~99% weniger Tokens als File-by-File-Exploration. Konfiguriert in `settings.json` unter `mcpServers`. Install + Nutzung siehe unten.
+
+### codebase-memory-mcp einrichten
+
+Single static binary (C, keine Runtime-Deps). Nach Install liegt das Binary i.d.R. unter `~/.local/bin/codebase-memory-mcp` (auf PATH):
+
+```bash
+# macOS / Linux
+curl -fsSL https://raw.githubusercontent.com/DeusData/codebase-memory-mcp/main/install.sh | bash
+# oder macOS via Homebrew
+brew install codebase-memory-mcp
+```
+
+Danach Claude Code neu starten und im jeweiligen Projekt einmal "Index this project" sagen. Liefert 14 MCP-Tools (Search, Tracing, Architektur-Analyse, Cypher-Queries). Ideal bei vielen parallelen Repos.
 
 ## SEO-Setup
 
@@ -180,3 +194,6 @@ Curated from:
 - [coreyhaines31/marketingskills](https://github.com/coreyhaines31/marketingskills) — programmatic-seo, ai-seo, competitors
 - [affilino/ecommerce-seo-audit-skill](https://github.com/affilino/ecommerce-seo-audit-skill) — Shopify-SEO-Audits
 - [AgriciDaniel/claude-seo](https://github.com/AgriciDaniel/claude-seo) — SEO-Plugin (via Marketplace)
+- [Leonxlnx/taste-skill](https://github.com/Leonxlnx/taste-skill) — Anti-Slop-Frontend-Skills (`design-taste-frontend`); ergänzt `rules/uncodixify.md`. Siehe `skills/design-taste-frontend/`
+- [DeusData/codebase-memory-mcp](https://github.com/DeusData/codebase-memory-mcp) — Code-Intelligence-MCP (siehe MCP Servers)
+- [HKUDS/ViMax](https://github.com/HKUDS/ViMax) — Agentisches Video-Framework. Integrationsplan für die Content-Pipeline: `integrations/vimax/`
