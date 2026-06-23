@@ -6,7 +6,7 @@ Personal Claude Code configuration backup for `~/.claude/`.
 
 | Directory | Count | Purpose |
 |-----------|-------|---------|
-| `skills/` | 474 | Skill definitions (markdown + templates) |
+| `skills/` | 466 | Skill definitions (markdown + templates) |
 | `agents/` | 182 | Specialized agent definitions |
 | `commands/` | 192 | Slash commands |
 | `rules/` | 9 | Global behavior rules |
