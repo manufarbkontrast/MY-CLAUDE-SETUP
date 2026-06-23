@@ -4,3 +4,8 @@ __pycache__/
 node_modules/
 dist/
 registry.json
+
+# Secrets
+.env
+.env.*
+!.env.example
