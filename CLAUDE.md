@@ -69,6 +69,7 @@ cp settings.json ~/.claude/settings.json
 - sanctum, conjure, pensive, memory-palace, spec-kit, leyline (athola/claude-night-market)
 - security-awareness, planning-with-files, python-code-simplifier, skill-extractor, scv-scan (trailofbits/skills-curated)
 - claude-seo (AgriciDaniel/claude-seo) — 25 SEO-Sub-Skills + 18 Agents: technisches Audit mit Headless-Rendering, Schema-Validierung, E-Commerce-SEO, hreflang, GEO/AEO
+- claude-video (bradautomates/claude-video) — /watch-Command: Video-Analyse (YouTube, Loom, TikTok, X, Instagram, lokale Files) via Frame-Extraktion + Audio-Transkription
 
 ## MCP Servers
 
@@ -76,6 +77,14 @@ cp settings.json ~/.claude/settings.json
 - dbhub (bytebase/dbhub) — Datenbank-MCP für Postgres, MySQL, SQLite etc.
 - linkedin (stickerdaniel/linkedin-mcp-server) — LinkedIn Profile, Companies, Jobs
 - gsc-mcp (mikusnuz/gsc-mcp) — Google Search Console: Clicks/Impressions/Positionen, URL-Inspektion, Sitemaps, Indexing API. Setup siehe SEO-Setup.
+- codebase-memory (DeusData/codebase-memory-mcp) — Code-Knowledge-Graph: indiziert Codebases via tree-sitter (158 Sprachen), sub-ms Queries, 99% weniger Token. Single binary, zero Dependencies.
+
+## Standalone Tools
+
+- strix (usestrix/strix) — AI-Pentesting-Agent: autonomes OWASP-Top-10-Testing mit echten Exploits, CI/CD-Integration, auto-generierte Fix-PRs. 39K ★
+- Agent-Reach (Panniantong/Agent-Reach) — Unified CLI für Social-Media-Zugriff (Twitter, Reddit, YouTube, GitHub) ohne API-Kosten. MCP-kompatibel. 54K ★
+- CodexBar (steipete/CodexBar) — macOS-Menübar: AI-Provider-Quotas, Credits, Limits über 57+ Provider. `brew install --cask codexbar`. 17K ★
+- Astryx (facebook/astryx) — Metas Design-System: 150+ React-Komponenten, StyleX, agent-ready API, 7 Themes, Dark Mode. 7.3K ★
 
 ## SEO-Setup
 
@@ -94,6 +103,27 @@ GSC-MCP einrichten (kostenlos, braucht Google-Cloud-Service-Account mit Zugriff 
 
 ```bash
 claude mcp add gsc-mcp --env GSC_SERVICE_ACCOUNT_KEY_PATH=/pfad/zu/service-account-key.json -- npx -y @mikusnuz/gsc-mcp
+```
+
+### Codebase-Memory-MCP einrichten
+
+```bash
+# Binary von GitHub Releases herunterladen: https://github.com/DeusData/codebase-memory-mcp/releases
+claude mcp add codebase-memory -- /pfad/zu/codebase-memory-mcp
+```
+
+### Agent-Reach einrichten
+
+```bash
+pip install agent-reach
+agent-reach doctor  # Diagnostik der verfügbaren Backends
+```
+
+### Strix einrichten (AI-Pentesting)
+
+```bash
+pip install strix
+# CI/CD: GitHub Action verfügbar unter usestrix/strix-action
 ```
 
 ## Rules
@@ -180,3 +210,9 @@ Curated from:
 - [coreyhaines31/marketingskills](https://github.com/coreyhaines31/marketingskills) — programmatic-seo, ai-seo, competitors
 - [affilino/ecommerce-seo-audit-skill](https://github.com/affilino/ecommerce-seo-audit-skill) — Shopify-SEO-Audits
 - [AgriciDaniel/claude-seo](https://github.com/AgriciDaniel/claude-seo) — SEO-Plugin (via Marketplace)
+- [bradautomates/claude-video](https://github.com/bradautomates/claude-video) — Video-Analyse-Plugin (via Marketplace)
+- [DeusData/codebase-memory-mcp](https://github.com/DeusData/codebase-memory-mcp) — Code-Knowledge-Graph MCP Server
+- [usestrix/strix](https://github.com/usestrix/strix) — AI-Pentesting-Agent
+- [Panniantong/Agent-Reach](https://github.com/Panniantong/Agent-Reach) — Social-Media-Content für AI-Agents
+- [steipete/CodexBar](https://github.com/steipete/CodexBar) — AI-Provider-Usage-Monitor
+- [facebook/astryx](https://github.com/facebook/astryx) — React Design-System (agent-ready)
