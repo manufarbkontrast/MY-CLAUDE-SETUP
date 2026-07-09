@@ -105,24 +105,31 @@ GSC-MCP einrichten (kostenlos, braucht Google-Cloud-Service-Account mit Zugriff 
 claude mcp add gsc-mcp --env GSC_SERVICE_ACCOUNT_KEY_PATH=/pfad/zu/service-account-key.json -- npx -y @mikusnuz/gsc-mcp
 ```
 
+### Alle neuen Tools auf einmal installieren
+
+```bash
+cd ~/my-claude-setup && ./install-new-tools.sh
+```
+
 ### Codebase-Memory-MCP einrichten
 
 ```bash
-# Binary von GitHub Releases herunterladen: https://github.com/DeusData/codebase-memory-mcp/releases
-claude mcp add codebase-memory -- /pfad/zu/codebase-memory-mcp
+curl -fsSL https://raw.githubusercontent.com/DeusData/codebase-memory-mcp/main/install.sh | bash
+codebase-memory-mcp install  # Auto-Detection + MCP-Registrierung
 ```
 
 ### Agent-Reach einrichten
 
 ```bash
-pip install agent-reach
+pipx install https://github.com/Panniantong/agent-reach/archive/main.zip
+agent-reach install --env=auto
 agent-reach doctor  # Diagnostik der verfügbaren Backends
 ```
 
-### Strix einrichten (AI-Pentesting)
+### Strix einrichten (AI-Pentesting, braucht Python 3.12+)
 
 ```bash
-pip install strix
+pipx install strix-agent
 # CI/CD: GitHub Action verfügbar unter usestrix/strix-action
 ```
 
