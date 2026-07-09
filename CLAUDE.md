@@ -84,7 +84,7 @@ cp settings.json ~/.claude/settings.json
 - strix (usestrix/strix) — AI-Pentesting-Agent: autonomes OWASP-Top-10-Testing mit echten Exploits, CI/CD-Integration, auto-generierte Fix-PRs. 39K ★
 - Agent-Reach (Panniantong/Agent-Reach) — Unified CLI für Social-Media-Zugriff (Twitter, Reddit, YouTube, GitHub) ohne API-Kosten. MCP-kompatibel. 54K ★
 - CodexBar (steipete/CodexBar) — macOS-Menübar: AI-Provider-Quotas, Credits, Limits über 57+ Provider. `brew install --cask codexbar`. 17K ★
-- Astryx (facebook/astryx) — Metas Design-System: 150+ React-Komponenten, StyleX, agent-ready API, 7 Themes, Dark Mode. 7.3K ★
+- Astryx (facebook/astryx) — Metas Design-System: 150+ React-Komponenten, StyleX, agent-ready API, 7 Themes, Dark Mode. 7.3K ★. Install: `npm install @astryxdesign/core @astryxdesign/theme-neutral`
 
 ## SEO-Setup
 
