@@ -76,6 +76,8 @@ cp settings.json ~/.claude/settings.json
 - dbhub (bytebase/dbhub) — Datenbank-MCP für Postgres, MySQL, SQLite etc.
 - linkedin (stickerdaniel/linkedin-mcp-server) — LinkedIn Profile, Companies, Jobs
 - gsc-mcp (mikusnuz/gsc-mcp) — Google Search Console: Clicks/Impressions/Positionen, URL-Inspektion, Sitemaps, Indexing API. Setup siehe SEO-Setup.
+- codebase-memory-mcp (DeusData/codebase-memory-mcp) — Code-Intelligence Knowledge-Graph: indiziert Codebases in persistenten Graph, 158 Sprachen, Sub-ms-Queries, 99% weniger Tokens. Setup: `curl -fsSL https://raw.githubusercontent.com/DeusData/codebase-memory-mcp/main/install.sh | bash`
+- officecli (iOfficeAI/OfficeCLI) — Office-Suite für AI Agents: Word/Excel/PowerPoint lesen, erstellen, bearbeiten als CLI. 350+ Excel-Funktionen, HTML/PNG-Rendering. Setup: Binary installieren, dann `officecli mcp claude`
 
 ## SEO-Setup
 

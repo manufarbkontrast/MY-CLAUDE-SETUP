@@ -1,4 +1,14 @@
 {
+  "mcpServers": {
+    "codebase-memory-mcp": {
+      "command": "codebase-memory-mcp",
+      "args": []
+    },
+    "officecli": {
+      "command": "officecli",
+      "args": ["mcp"]
+    }
+  },
   "hooks": {
     "PreToolUse": [
       {
