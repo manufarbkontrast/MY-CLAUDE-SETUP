@@ -79,8 +79,9 @@ export function matchSkills(
     if (lowerPrompt.includes(skillName) || lowerPrompt.includes(skillId)) {
       combinedScore += 0.6;
     }
-    // Partial name match: require segment >= 5 chars to reduce false positives
-    const segments = skillId.split("-");
+    // Partial name match: require segment >= 5 chars to reduce false positives.
+    // ":" splits the plugin namespace off, e.g. "claude-seo:seo-audit".
+    const segments = skillId.split(/[-:]/);
     const matchingSegments = segments.filter(
       (seg) => seg.length >= 5 && lowerPrompt.includes(seg)
     );
@@ -179,7 +180,7 @@ export function matchAgents(
 
     // Boost if agent name directly matches a prompt term
     const agentName = agent.id.toLowerCase();
-    for (const segment of agentName.split("-")) {
+    for (const segment of agentName.split(/[-:]/)) {
       if (segment.length > 3 && lowerPrompt.includes(segment)) {
         score += 0.15;
         break;

@@ -1,4 +1,5 @@
 import * as fs from "node:fs";
+import * as os from "node:os";
 import * as path from "node:path";
 import type {
   Registry,
@@ -8,512 +9,51 @@ import type {
   RuleEntry,
   HookEntry,
 } from "./types.js";
+import {
+  deriveCategory,
+  extractKeywords,
+  parseFrontmatter,
+  summarize,
+} from "./parse.js";
+import {
+  discoverPlugins,
+  scanPluginAgents,
+  scanPluginCommands,
+  scanPluginSkills,
+  type ScanWarning,
+} from "./plugins.js";
 
-const REPO_ROOT = path.resolve(import.meta.dirname, "..");
+const REPO_ROOT =
+  process.env.PROMPT_OPTIMIZER_ROOT ?? path.resolve(import.meta.dirname, "..");
 
-// --- Parsing helpers ---
+/**
+ * Claude Code loads skills, agents, commands and rules from ~/.claude — the
+ * repo is only the versioned copy of them. Scanning ~/.claude keeps the
+ * registry aligned with what is actually available at runtime; the repo is
+ * the fallback when no user config directory exists (e.g. CI).
+ */
+const USER_ROOT = process.env.CLAUDE_CONFIG_DIR ?? path.join(os.homedir(), ".claude");
 
-function parseFrontmatter(content: string): {
-  frontmatter: Record<string, string>;
-  body: string;
-} {
-  const match = content.match(/^---\n([\s\S]*?)\n---\n?([\s\S]*)$/);
-  if (!match) {
-    return { frontmatter: {}, body: content };
-  }
-
-  const raw = match[1] ?? "";
-  const body = match[2] ?? "";
-  const frontmatter: Record<string, string> = {};
-
-  for (const line of raw.split("\n")) {
-    const colonIdx = line.indexOf(":");
-    if (colonIdx === -1) continue;
-    const key = line.slice(0, colonIdx).trim();
-    let value = line.slice(colonIdx + 1).trim();
-    // Strip surrounding quotes
-    if (
-      (value.startsWith('"') && value.endsWith('"')) ||
-      (value.startsWith("'") && value.endsWith("'"))
-    ) {
-      value = value.slice(1, -1);
-    }
-    frontmatter[key] = value;
-  }
-
-  return { frontmatter, body };
+/** Picks the live directory when present, else the repo copy. */
+function assetRoot(dirName: string): string {
+  const userDir = path.join(USER_ROOT, dirName);
+  return fs.existsSync(userDir) ? userDir : path.join(REPO_ROOT, dirName);
 }
 
-function extractKeywords(
-  name: string,
-  description: string,
-  body: string
-): readonly string[] {
-  const text = `${name} ${description} ${body.slice(0, 2000)}`.toLowerCase();
-
-  // Technology / framework keywords to detect
-  const techPatterns = [
-    "react",
-    "next.js",
-    "nextjs",
-    "vue",
-    "nuxt",
-    "angular",
-    "svelte",
-    "solid",
-    "astro",
-    "remix",
-    "gatsby",
-    "node",
-    "nodejs",
-    "deno",
-    "bun",
-    "express",
-    "fastapi",
-    "django",
-    "flask",
-    "rails",
-    "laravel",
-    "spring",
-    "nest",
-    "hono",
-    "elysia",
-    "typescript",
-    "javascript",
-    "python",
-    "rust",
-    "go",
-    "golang",
-    "java",
-    "kotlin",
-    "swift",
-    "c#",
-    "csharp",
-    "dotnet",
-    ".net",
-    "ruby",
-    "php",
-    "elixir",
-    "scala",
-    "haskell",
-    "julia",
-    "dart",
-    "flutter",
-    "c++",
-    "cpp",
-    "postgres",
-    "postgresql",
-    "mysql",
-    "mongodb",
-    "redis",
-    "sqlite",
-    "supabase",
-    "firebase",
-    "prisma",
-    "drizzle",
-    "d1",
-    "neon",
-    "planetscale",
-    "shopify",
-    "stripe",
-    "paypal",
-    "woocommerce",
-    "magento",
-    "aws",
-    "azure",
-    "gcp",
-    "cloudflare",
-    "vercel",
-    "netlify",
-    "docker",
-    "kubernetes",
-    "k8s",
-    "terraform",
-    "helm",
-    "github",
-    "gitlab",
-    "ci/cd",
-    "cicd",
-    "graphql",
-    "rest",
-    "grpc",
-    "websocket",
-    "sse",
-    "oauth",
-    "jwt",
-    "auth",
-    "authentication",
-    "authorization",
-    "rbac",
-    "security",
-    "testing",
-    "jest",
-    "vitest",
-    "playwright",
-    "cypress",
-    "selenium",
-    "tdd",
-    "bdd",
-    "seo",
-    "accessibility",
-    "a11y",
-    "wcag",
-    "performance",
-    "optimization",
-    "caching",
-    "cdn",
-    "rag",
-    "llm",
-    "ai",
-    "ml",
-    "embedding",
-    "vector",
-    "langchain",
-    "openai",
-    "anthropic",
-    "claude",
-    "tailwind",
-    "css",
-    "sass",
-    "styled",
-    "design-system",
-    "ui",
-    "ux",
-    "responsive",
-    "mobile",
-    "ios",
-    "android",
-    "react-native",
-    "pwa",
-    "api",
-    "microservices",
-    "monorepo",
-    "turborepo",
-    "nx",
-    "webpack",
-    "vite",
-    "esbuild",
-    "rollup",
-    "bundler",
-    "blockchain",
-    "web3",
-    "solidity",
-    "nft",
-    "defi",
-    "automation",
-    "workflow",
-    "temporal",
-    "durable-objects",
-    "workers",
-    "edge",
-    "serverless",
-    "lambda",
-    "mcp",
-    "prompt",
-    "agent",
-    "debugging",
-    "refactoring",
-    "migration",
-    "deployment",
-    "monitoring",
-    "observability",
-    "logging",
-    "tracing",
-    "incident",
-    "devops",
-    "sre",
-    "data-pipeline",
-    "etl",
-    "spark",
-    "airflow",
-    "dbt",
-    "analytics",
-    "dashboard",
-    "report",
-    "e-commerce",
-    "checkout",
-    "payment",
-    "billing",
-    "subscription",
-    "content",
-    "cms",
-    "markdown",
-    "documentation",
-    "openapi",
-    "swagger",
-    "schema",
-    "validation",
-    "zod",
-    "pydantic",
-    "form",
-    "upload",
-    "image",
-    "media",
-    "video",
-    "threejs",
-    "3d",
-    "animation",
-    "motion",
-    "canvas",
-    "game",
-    "unity",
-    "godot",
-    "firmware",
-    "embedded",
-    "iot",
-    "arm",
-    "cortex",
-  ];
-
-  const found = new Set<string>();
-  for (const kw of techPatterns) {
-    if (text.includes(kw)) {
-      found.add(kw);
-    }
-  }
-
-  // Add the name segments as keywords
-  const nameSegments = name
-    .split(/[-_./\\]/)
-    .filter((s) => s.length > 2)
-    .map((s) => s.toLowerCase());
-  for (const seg of nameSegments) {
-    found.add(seg);
-  }
-
-  return Object.freeze([...found]);
+/** settings.json holds the hook definitions; the live one wins. */
+function settingsFile(): string {
+  const userSettings = path.join(USER_ROOT, "settings.json");
+  return fs.existsSync(userSettings)
+    ? userSettings
+    : path.join(REPO_ROOT, "settings.json");
 }
 
-function summarize(body: string, maxLen = 200): string {
-  // Take the first meaningful paragraph after the title
-  const lines = body.split("\n").filter((l) => l.trim().length > 0);
-  let summary = "";
-  for (const line of lines) {
-    const trimmed = line.trim();
-    // Skip headings and code fences
-    if (trimmed.startsWith("#") || trimmed.startsWith("```")) continue;
-    // Skip frontmatter-like lines
-    if (trimmed.startsWith("---")) continue;
-    summary = trimmed;
-    break;
-  }
-  if (summary.length > maxLen) {
-    return summary.slice(0, maxLen - 3) + "...";
-  }
-  return summary || "No summary available";
-}
+const SETTINGS_FILE = settingsFile();
 
-function deriveCategory(dirPath: string): string {
-  const dirName = path.basename(dirPath).toLowerCase();
-
-  const categoryMap: Record<string, readonly string[]> = {
-    "e-commerce": [
-      "shopify",
-      "woocommerce",
-      "stripe",
-      "paypal",
-      "payment",
-      "billing",
-      "checkout",
-    ],
-    frontend: [
-      "react",
-      "vue",
-      "angular",
-      "svelte",
-      "nextjs",
-      "nuxt",
-      "frontend",
-      "css",
-      "tailwind",
-      "ui",
-      "design",
-      "responsive",
-      "accessibility",
-      "motion",
-      "canvas",
-      "threejs",
-    ],
-    backend: [
-      "express",
-      "fastapi",
-      "django",
-      "flask",
-      "nest",
-      "hono",
-      "rails",
-      "spring",
-      "backend",
-      "api",
-      "rest",
-      "graphql",
-      "grpc",
-      "websocket",
-    ],
-    database: [
-      "postgres",
-      "mysql",
-      "mongo",
-      "redis",
-      "sqlite",
-      "supabase",
-      "prisma",
-      "drizzle",
-      "database",
-      "sql",
-      "migration",
-      "schema",
-    ],
-    devops: [
-      "docker",
-      "kubernetes",
-      "k8s",
-      "terraform",
-      "helm",
-      "ci",
-      "cd",
-      "github-actions",
-      "gitlab",
-      "deploy",
-      "monitor",
-      "observability",
-      "logging",
-    ],
-    security: [
-      "security",
-      "auth",
-      "oauth",
-      "jwt",
-      "rbac",
-      "csrf",
-      "xss",
-      "sast",
-      "vulnerability",
-      "secrets",
-      "compliance",
-    ],
-    testing: [
-      "test",
-      "jest",
-      "vitest",
-      "playwright",
-      "cypress",
-      "tdd",
-      "bdd",
-      "e2e",
-      "coverage",
-      "mutation",
-    ],
-    ai: [
-      "ai",
-      "ml",
-      "llm",
-      "rag",
-      "embedding",
-      "vector",
-      "langchain",
-      "prompt",
-      "agent",
-      "model",
-    ],
-    cloud: [
-      "aws",
-      "azure",
-      "gcp",
-      "cloudflare",
-      "workers",
-      "serverless",
-      "lambda",
-      "edge",
-      "durable",
-    ],
-    mobile: [
-      "mobile",
-      "ios",
-      "android",
-      "react-native",
-      "flutter",
-      "swift",
-      "kotlin",
-      "pwa",
-      "app-store",
-    ],
-    data: [
-      "data",
-      "pipeline",
-      "etl",
-      "spark",
-      "airflow",
-      "dbt",
-      "analytics",
-      "dashboard",
-    ],
-    content: ["seo", "content", "cms", "markdown", "documentation", "doc"],
-    architecture: [
-      "architecture",
-      "pattern",
-      "microservices",
-      "monorepo",
-      "event",
-      "cqrs",
-      "saga",
-      "ddd",
-    ],
-    language: [
-      "typescript",
-      "javascript",
-      "python",
-      "rust",
-      "go",
-      "golang",
-      "java",
-      "ruby",
-      "php",
-      "elixir",
-      "scala",
-      "haskell",
-      "julia",
-      "cpp",
-      "csharp",
-      "swift",
-      "dart",
-      "bash",
-    ],
-    blockchain: [
-      "blockchain",
-      "web3",
-      "solidity",
-      "nft",
-      "defi",
-      "smart-contract",
-    ],
-    automation: [
-      "automation",
-      "workflow",
-      "temporal",
-      "hook",
-      "script",
-      "shell",
-    ],
-    gaming: ["game", "unity", "godot", "3d", "ecs"],
-    embedded: ["firmware", "embedded", "iot", "arm", "cortex"],
-  };
-
-  for (const [category, patterns] of Object.entries(categoryMap)) {
-    for (const pat of patterns) {
-      if (dirName.includes(pat)) {
-        return category;
-      }
-    }
-  }
-
-  return "general";
-}
-
-// --- Scanners ---
+// --- Local scanners ---
 
 function scanSkills(): readonly SkillEntry[] {
-  const skillsDir = path.join(REPO_ROOT, "skills");
+  const skillsDir = assetRoot("skills");
   if (!fs.existsSync(skillsDir)) return [];
 
   const entries = fs.readdirSync(skillsDir, { withFileTypes: true });
@@ -533,19 +73,17 @@ function scanSkills(): readonly SkillEntry[] {
     const id = entry.name;
     const name = frontmatter.name || entry.name;
     const description = frontmatter.description || "";
-    const keywords = extractKeywords(name, description, body);
-    const category = deriveCategory(skillDir);
-    const contentSummary = summarize(body);
 
     skills.push(
       Object.freeze({
         id,
         name,
         description,
-        keywords,
-        category,
-        path: `skills/${entry.name}/SKILL.md`,
-        contentSummary,
+        keywords: extractKeywords(name, description, body),
+        category: deriveCategory(skillDir),
+        path: skillFile,
+        contentSummary: summarize(body),
+        source: "local" as const,
       })
     );
   }
@@ -554,7 +92,7 @@ function scanSkills(): readonly SkillEntry[] {
 }
 
 function scanAgents(): readonly AgentEntry[] {
-  const agentsDir = path.join(REPO_ROOT, "agents");
+  const agentsDir = assetRoot("agents");
   if (!fs.existsSync(agentsDir)) return [];
 
   const files = fs.readdirSync(agentsDir).filter((f) => f.endsWith(".md"));
@@ -568,7 +106,8 @@ function scanAgents(): readonly AgentEntry[] {
     const id = file.replace(".md", "");
     const name = frontmatter.name || id;
     const description = frontmatter.description || "";
-    const role = body.split("\n").find((l) => l.startsWith("You are"))?.trim() || "";
+    const role =
+      body.split("\n").find((l) => l.startsWith("You are"))?.trim() || "";
 
     // Parse tools array from frontmatter
     let tools: string[] = [];
@@ -580,9 +119,6 @@ function scanAgents(): readonly AgentEntry[] {
       }
     }
 
-    const model = frontmatter.model || "sonnet";
-    const contentSummary = summarize(body);
-
     agents.push(
       Object.freeze({
         id,
@@ -590,9 +126,10 @@ function scanAgents(): readonly AgentEntry[] {
         description,
         role,
         tools: Object.freeze(tools),
-        model,
-        path: `agents/${file}`,
-        contentSummary,
+        model: frontmatter.model || "sonnet",
+        path: filePath,
+        contentSummary: summarize(body),
+        source: "local" as const,
       })
     );
   }
@@ -601,7 +138,7 @@ function scanAgents(): readonly AgentEntry[] {
 }
 
 function scanCommands(): readonly CommandEntry[] {
-  const commandsDir = path.join(REPO_ROOT, "commands");
+  const commandsDir = assetRoot("commands");
   if (!fs.existsSync(commandsDir)) return [];
 
   const files = fs.readdirSync(commandsDir).filter((f) => f.endsWith(".md"));
@@ -613,8 +150,6 @@ function scanCommands(): readonly CommandEntry[] {
     const { frontmatter, body } = parseFrontmatter(content);
 
     const id = file.replace(".md", "");
-    const name = id;
-    const description = frontmatter.description || "";
 
     // Try to find usage from body
     const usageMatch = body.match(/## Usage\n([\s\S]*?)(?=\n##|\n$)/);
@@ -623,22 +158,21 @@ function scanCommands(): readonly CommandEntry[] {
     // Find related skills by scanning body for skill references
     const relatedSkills: string[] = [];
     const skillRefPattern = /skills\/([a-z0-9-]+)/gi;
-    let skillMatch;
+    let skillMatch: RegExpExecArray | null;
     while ((skillMatch = skillRefPattern.exec(body)) !== null) {
       if (skillMatch[1]) relatedSkills.push(skillMatch[1]);
     }
 
-    const contentSummary = summarize(body);
-
     commands.push(
       Object.freeze({
         id,
-        name,
-        description,
+        name: id,
+        description: frontmatter.description || "",
         usage,
         relatedSkills: Object.freeze(relatedSkills),
-        path: `commands/${file}`,
-        contentSummary,
+        path: filePath,
+        contentSummary: summarize(body),
+        source: "local" as const,
       })
     );
   }
@@ -647,7 +181,7 @@ function scanCommands(): readonly CommandEntry[] {
 }
 
 function scanRules(): readonly RuleEntry[] {
-  const rulesDir = path.join(REPO_ROOT, "rules");
+  const rulesDir = assetRoot("rules");
   if (!fs.existsSync(rulesDir)) return [];
 
   const files = fs.readdirSync(rulesDir).filter((f) => f.endsWith(".md"));
@@ -667,15 +201,14 @@ function scanRules(): readonly RuleEntry[] {
     // First heading or first paragraph as description
     const firstHeading = body.match(/^#\s+(.+)$/m);
     const description = (firstHeading ? firstHeading[1] : name) ?? name;
-    const contentSummary = summarize(body);
 
     rules.push(
       Object.freeze({
         id,
         name,
         description,
-        path: `rules/${file}`,
-        contentSummary,
+        path: filePath,
+        contentSummary: summarize(body),
       })
     );
   }
@@ -684,10 +217,9 @@ function scanRules(): readonly RuleEntry[] {
 }
 
 function scanHooks(): readonly HookEntry[] {
-  const settingsFile = path.join(REPO_ROOT, "settings.json");
-  if (!fs.existsSync(settingsFile)) return [];
+  if (!fs.existsSync(SETTINGS_FILE)) return [];
 
-  const settings = JSON.parse(fs.readFileSync(settingsFile, "utf-8"));
+  const settings = JSON.parse(fs.readFileSync(SETTINGS_FILE, "utf-8"));
   const hooksConfig = settings.hooks;
   if (!hooksConfig) return [];
 
@@ -700,7 +232,6 @@ function scanHooks(): readonly HookEntry[] {
       const hookEntry = entry as {
         matcher?: string;
         description?: string;
-        hooks?: Array<{ type?: string; command?: string }>;
       };
       hooks.push(
         Object.freeze({
@@ -716,35 +247,89 @@ function scanHooks(): readonly HookEntry[] {
   return Object.freeze(hooks);
 }
 
+// --- Merging ---
+
+/**
+ * Concatenates local and plugin entries, dropping later duplicates by id.
+ * Local entries win, so a plugin can never shadow a hand-written asset.
+ */
+function mergeById<T extends { readonly id: string }>(
+  ...groups: readonly (readonly T[])[]
+): readonly T[] {
+  const byId = new Map<string, T>();
+  for (const group of groups) {
+    for (const entry of group) {
+      if (!byId.has(entry.id)) byId.set(entry.id, entry);
+    }
+  }
+  return Object.freeze([...byId.values()]);
+}
+
 // --- Main ---
 
 function buildRegistry(): Registry {
-  console.log("Scanning skills...");
-  const skills = scanSkills();
-  console.log(`  Found ${skills.length} skills`);
+  const warnings: ScanWarning[] = [];
 
-  console.log("Scanning agents...");
-  const agents = scanAgents();
-  console.log(`  Found ${agents.length} agents`);
+  console.log(`Scanning local assets from ${assetRoot("skills")}/..`);
+  const localSkills = scanSkills();
+  const localAgents = scanAgents();
+  const localCommands = scanCommands();
+  console.log(
+    `  ${localSkills.length} skills, ${localAgents.length} agents, ${localCommands.length} commands`
+  );
 
-  console.log("Scanning commands...");
-  const commands = scanCommands();
-  console.log(`  Found ${commands.length} commands`);
+  console.log("Scanning plugins...");
+  const plugins = discoverPlugins(SETTINGS_FILE, warnings);
+  const scanned = plugins.map((plugin) => ({
+    plugin,
+    skills: scanPluginSkills(plugin),
+    agents: scanPluginAgents(plugin),
+    commands: scanPluginCommands(plugin),
+  }));
 
-  console.log("Scanning rules...");
+  const pluginSkills = scanned.flatMap((s) => [...s.skills]);
+  const pluginAgents = scanned.flatMap((s) => [...s.agents]);
+  const pluginCommands = scanned.flatMap((s) => [...s.commands]);
+  console.log(
+    `  ${plugins.length} plugins -> ${pluginSkills.length} skills, ${pluginAgents.length} agents, ${pluginCommands.length} commands`
+  );
+  for (const s of scanned) {
+    const total = s.skills.length + s.agents.length + s.commands.length;
+    if (total === 0) {
+      warnings.push({
+        scope: s.plugin.key,
+        message: "contributes no skills, agents or commands",
+      });
+      continue;
+    }
+    console.log(
+      `    ${s.plugin.name}@${s.plugin.version}: ${s.skills.length} skills, ${s.agents.length} agents, ${s.commands.length} commands`
+    );
+  }
+
+  console.log("Scanning rules & hooks...");
   const rules = scanRules();
-  console.log(`  Found ${rules.length} rules`);
-
-  console.log("Scanning hooks...");
   const hooks = scanHooks();
-  console.log(`  Found ${hooks.length} hooks`);
+  console.log(`  ${rules.length} rules, ${hooks.length} hooks`);
 
-  const registry: Registry = Object.freeze({
+  const skills = mergeById(localSkills, pluginSkills);
+  const agents = mergeById(localAgents, pluginAgents);
+  const commands = mergeById(localCommands, pluginCommands);
+
+  if (warnings.length > 0) {
+    console.log("\nWarnings:");
+    for (const w of warnings) {
+      console.log(`  [${w.scope}] ${w.message}`);
+    }
+  }
+
+  return Object.freeze({
     skills,
     agents,
     commands,
     rules,
     hooks,
+    plugins,
     metadata: Object.freeze({
       generatedAt: new Date().toISOString(),
       skillCount: skills.length,
@@ -752,17 +337,23 @@ function buildRegistry(): Registry {
       commandCount: commands.length,
       ruleCount: rules.length,
       hookCount: hooks.length,
+      pluginCount: plugins.length,
+      pluginSkillCount: skills.filter((s) => s.source === "plugin").length,
+      pluginAgentCount: agents.filter((a) => a.source === "plugin").length,
+      pluginCommandCount: commands.filter((c) => c.source === "plugin").length,
     }),
   });
-
-  return registry;
 }
 
 const registry = buildRegistry();
 const outputPath = path.join(REPO_ROOT, "registry.json");
 fs.writeFileSync(outputPath, JSON.stringify(registry, null, 2), "utf-8");
 
+const m = registry.metadata;
 console.log(`\nRegistry written to ${outputPath}`);
 console.log(
-  `Total: ${registry.metadata.skillCount} skills, ${registry.metadata.agentCount} agents, ${registry.metadata.commandCount} commands, ${registry.metadata.ruleCount} rules, ${registry.metadata.hookCount} hooks`
+  `Total: ${m.skillCount} skills, ${m.agentCount} agents, ${m.commandCount} commands, ${m.ruleCount} rules, ${m.hookCount} hooks`
+);
+console.log(
+  `  thereof from ${m.pluginCount} plugins: ${m.pluginSkillCount} skills, ${m.pluginAgentCount} agents, ${m.pluginCommandCount} commands`
 );

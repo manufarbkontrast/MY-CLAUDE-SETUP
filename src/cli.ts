@@ -38,15 +38,29 @@ function showStats(): void {
   const registry = JSON.parse(fs.readFileSync(registryPath, "utf-8"));
   const meta = registry.metadata;
 
+  const fromPlugins = (total: number, plugin: number | undefined): string =>
+    plugin === undefined ? `${total}` : `${total} (${plugin} from plugins)`;
+
   console.log(`Prompt Optimizer Registry`);
   console.log(`========================`);
   console.log(`Generated: ${meta.generatedAt}`);
-  console.log(`Skills:    ${meta.skillCount}`);
-  console.log(`Agents:    ${meta.agentCount}`);
-  console.log(`Commands:  ${meta.commandCount}`);
+  console.log(`Skills:    ${fromPlugins(meta.skillCount, meta.pluginSkillCount)}`);
+  console.log(`Agents:    ${fromPlugins(meta.agentCount, meta.pluginAgentCount)}`);
+  console.log(`Commands:  ${fromPlugins(meta.commandCount, meta.pluginCommandCount)}`);
   console.log(`Rules:     ${meta.ruleCount}`);
   console.log(`Hooks:     ${meta.hookCount}`);
+  console.log(`Plugins:   ${meta.pluginCount ?? 0}`);
   console.log(`Total:     ${meta.skillCount + meta.agentCount + meta.commandCount + meta.ruleCount + meta.hookCount} entries`);
+
+  const plugins = registry.plugins as
+    | Array<{ name: string; version: string; marketplace: string }>
+    | undefined;
+  if (plugins && plugins.length > 0) {
+    console.log(`\nActive plugins:`);
+    for (const p of plugins) {
+      console.log(`  ${p.name}@${p.version}  (${p.marketplace})`);
+    }
+  }
 }
 
 async function runBuildRegistry(): Promise<void> {
