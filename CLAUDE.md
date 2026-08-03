@@ -69,12 +69,14 @@ cp settings.json ~/.claude/settings.json
 - sanctum, conjure, pensive, memory-palace, spec-kit, leyline (athola/claude-night-market)
 - security-awareness, planning-with-files, python-code-simplifier, skill-extractor, scv-scan (trailofbits/skills-curated)
 - claude-seo (AgriciDaniel/claude-seo) — 25 SEO-Sub-Skills + 18 Agents: technisches Audit mit Headless-Rendering, Schema-Validierung, E-Commerce-SEO, hreflang, GEO/AEO
+- aaron-marketing (aaron-he-zhu/aaron-marketing-skills) — 120 Marketing-Skills in 7 Disziplinen mit 8 Auditor-Gates (CORE-EEAT, CITE, STAR, ROAS, SEND, RAMP, ECHO, TALE). Primär genutzt fuer: Influencer-Marketing (16 Skills), Auditor-Gate-Struktur. Overlap mit marketing-skill/ bei SEO/Ads/Email — dort vorhandene Skills bevorzugen.
 
 ## MCP Servers
 
 - lightpanda — Browser-Automatisierung
 - dbhub (bytebase/dbhub) — Datenbank-MCP für Postgres, MySQL, SQLite etc.
 - linkedin (stickerdaniel/linkedin-mcp-server) — LinkedIn Profile, Companies, Jobs
+- codebase-memory-mcp (DeusData/codebase-memory-mcp) — Code-Intelligence: indexiert Codebases in persistenten Knowledge-Graph. 158 Sprachen, Sub-ms-Queries, 99% weniger Tokens. Setup: `curl -fsSL https://raw.githubusercontent.com/DeusData/codebase-memory-mcp/main/install.sh | bash` dann Claude neu starten und "Index this project" sagen.
 - gsc-mcp (mikusnuz/gsc-mcp) — Google Search Console: Clicks/Impressions/Positionen, URL-Inspektion, Sitemaps, Indexing API. Setup siehe SEO-Setup.
 
 ## SEO-Setup
@@ -95,6 +97,35 @@ GSC-MCP einrichten (kostenlos, braucht Google-Cloud-Service-Account mit Zugriff 
 ```bash
 claude mcp add gsc-mcp --env GSC_SERVICE_ACCOUNT_KEY_PATH=/pfad/zu/service-account-key.json -- npx -y @mikusnuz/gsc-mcp
 ```
+
+## Code-Intelligence-Tools (August 2026)
+
+### Graphify — Codebase Knowledge-Graph Skill
+
+Verwandelt Codebases in abfragbare Knowledge-Graphs per AST/Tree-Sitter-Parsing. 158 Sprachen, kein Vector Store.
+
+```bash
+uv tool install graphifyy
+graphify install
+# Optional: Always-On Graph Mode (PreToolUse Hook + CLAUDE.md-Eintrag)
+graphify claude install
+```
+
+Nutzung in Claude Code: `/graphify .`
+
+Quelle: [Graphify-Labs/graphify](https://github.com/Graphify-Labs/graphify) — 101k Sterne
+
+### ctx — Skill/Agent/MCP Discovery-Engine
+
+Repo-aware Empfehlungs-Engine mit 79.958-Knoten-Graph (68.494 Skills, 467 Agents, 10.790 MCPs). Ergaenzt den lokalen Prompt-Optimizer (`po`) um globale Discovery.
+
+```bash
+pip install claude-ctx
+ctx-init --graph --model-mode skip
+ctx-scan-repo --repo . --recommend
+```
+
+Quelle: [stevesolun/ctx](https://github.com/stevesolun/ctx) — 568 Sterne
 
 ## Rules
 
