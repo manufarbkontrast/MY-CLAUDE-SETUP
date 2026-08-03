@@ -347,7 +347,17 @@ function buildRegistry(): Registry {
 
 const registry = buildRegistry();
 const outputPath = path.join(REPO_ROOT, "registry.json");
-fs.writeFileSync(outputPath, JSON.stringify(registry, null, 2), "utf-8");
+
+// Write atomically: the SessionStart hook rebuilds in the background, so a
+// concurrent `po <prompt>` must never observe a half-written registry.
+const tmpPath = `${outputPath}.${process.pid}.tmp`;
+try {
+  fs.writeFileSync(tmpPath, JSON.stringify(registry, null, 2), "utf-8");
+  fs.renameSync(tmpPath, outputPath);
+} catch (err) {
+  fs.rmSync(tmpPath, { force: true });
+  throw err;
+}
 
 const m = registry.metadata;
 console.log(`\nRegistry written to ${outputPath}`);
