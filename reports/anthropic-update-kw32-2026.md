@@ -1,52 +1,64 @@
-# 📡 Anthropic Update-Report – KW 32 (29. Juli – 5. August 2026)
+# 📡 Anthropic Update-Report – KW 32 (29. Juli – 6. August 2026)
 
-> Automatisch generiert am 5. August 2026
+> Automatisch generiert am 6. August 2026 (aktualisiert — v2.1.223 + Plattform-Updates vom 5. Aug.)
 
 ## 🔴 Sofort relevant für dein Setup
 
-### 1. 🛡️ PreToolUse Auto-Allow Hooks: Bypass in Background Agents gefixt (v2.1.222, 4. Aug.)
+### 1. 🛡️ Vier Security-Fixes in v2.1.223 (6. Aug.)
+
+Kritisches Sicherheitsupdate — vier unabhängige Bypass-Vektoren geschlossen:
+
+- **Bash Permission Bypass:** Speziell konstruierte Commands konnten sich vor Permission-Checks verstecken.
+- **Unicode-Padding in Permission-Prompts:** Commands mit Tabs oder unsichtbaren Unicode-Zeichen konnten Teile der Genehmigungsanzeige verbergen.
+- **Workflow-Sandbox-Escape:** Workflow-Scripts konnten via dynamisches `import()` Code außerhalb der Sandbox ausführen.
+- **Agent `bypassPermissions`:** Die `bypassPermissions`-Option in Agent-Definitionen ignorierte die Org-Policy zum Deaktivieren dieses Modus.
+
+**Typ:** 🐛 Bugfix (sicherheitskritisch)
+**Relevanz:** Das Setup hat 182 Agents und diverse Workflow-Scripts. Die `bypassPermissions`-Referenzen in den Claude Agent SDK Skills (`skills/claude-agent-sdk/`) sollten geprüft werden — die Docs dort beschreiben das Feature, das jetzt strenger an Org-Policies gebunden ist. **Aktion:** Claude Code auf v2.1.223 updaten. In `rules/security.md` die neuen Bypass-Vektoren (Unicode-Padding, dynamic imports) als bekannte, jetzt gefixte Risiken dokumentieren.
+
+### 2. 🔧 `/review` ist jetzt Alias von `/code-review` (v2.1.223, 6. Aug.)
+
+`/review` leitet intern auf `/code-review` weiter.
+
+**Typ:** 🔧 Verbesserung
+**Relevanz:** Das Setup hat keinen eigenen `commands/review.md` — kein Namenskonflikt. Aber 17 Command-Dateien referenzieren `/code-review` oder Review-Workflows. **Aktion:** In `CLAUDE.md` unter "Key Commands" den Alias `/review` = `/code-review` dokumentieren. Ggf. in `commands/orchestrate.md` und `commands/full-review.md` den kürzeren `/review`-Alias nutzen.
+
+### 3. 🆕 `/code-review ultra` für Deep Cloud Review (v2.1.223, 6. Aug.)
+
+`/code-review` merkt sich jetzt den letzten Effort-Level. Neuer Level `ultra` nutzt Cloud-basierte Deep-Analyse.
+
+**Typ:** 🆕 Neues Feature
+**Relevanz:** **Aktion:** In `CLAUDE.md` unter "Key Commands" den Eintrag für `/code-review` erweitern: `— Security + quality review (merkt sich Effort; /code-review ultra für Deep Cloud Review)`. In `commands/orchestrate.md` den Review-Schritt auf `/code-review high` oder `/code-review ultra` upgraden.
+
+### 4. 🛡️ PreToolUse Auto-Allow Hooks: Bypass in Background Agents gefixt (v2.1.222, 4. Aug.)
 
 Auto-Allow-Hooks konnten bisher Tool-Restrictions in Background Agent Tasks umgehen. Jetzt werden PreToolUse-Hooks auch dort korrekt durchgesetzt.
 
 **Typ:** 🐛 Bugfix (sicherheitsrelevant)
 **Relevanz:** Das Setup hat PreToolUse-Hooks für dev-server-blocking, git-push-Warnungen und .md/.txt-Blocking. Diese greifen jetzt zuverlässig auch in Hintergrund-Agents. **Kein Handlungsbedarf**, aber die Hooks sind jetzt deutlich robuster.
 
-### 2. 🛡️ Bash Permission-Check Bypass via zsh Regex gefixt (v2.1.221, 4. Aug.)
+### 5. 🛡️ Worktree-Isolation jetzt vollständig (v2.1.222, 4. Aug.)
 
-Bash-Permission-Checks konnten über zsh-Regex-Conditionals umgangen werden.
-
-**Typ:** 🐛 Bugfix (sicherheitsrelevant)
-**Relevanz:** Betrifft die grundlegende Sandbox-Sicherheit. **Aktion:** In `rules/security.md` als bekannten (jetzt gefixten) Angriffsvektor vermerken, damit bei eigenen Hook-Commands keine zsh-spezifischen Regex-Konstrukte als Workaround verwendet werden.
-
-### 3. 🔧 Worktree-Isolation jetzt vollständig (v2.1.222, 4. Aug.)
-
-Erweiterung des Fixes aus KW 29: Worktree-Isolation gilt jetzt auch für Dateibearbeitungen (Edit/Write) und Bash, nicht nur für Git-Operationen.
+Worktree-isolierte Sessions und Subagents konnten destruktive Git-Commands gegen das Main Checkout ausführen. Gefixt.
 
 **Typ:** 🐛 Bugfix
 **Relevanz:** 27 Dateien im Setup referenzieren Worktrees (u.a. `git-worktree-manager`, `agenthub`, `root-cause-tracing`). Agents mit `isolation: 'worktree'` sind jetzt vollständig isoliert. **Kein Handlungsbedarf**, aber Worktree-basierte Workflows sind jetzt produktionsreif.
 
-### 4. 🆕 `prompt-audit` Subcommand für `claude-api` Skill (v2.1.221, 4. Aug.)
+### 6. 🆕 Owner-Wildcards für Marketplace-Settings (v2.1.223, 6. Aug.)
 
-Neuer Subcommand, der Prompts auf Best Practices prüft — passt zum Prompt Optimizer im Setup.
-
-**Typ:** 🆕 Neues Feature
-**Relevanz:** **Aktion:** Prüfen ob `prompt-audit` in den Prompt-Optimizer-Workflow (`src/optimize-prompt.ts`) integriert werden kann. Könnte als zusätzlicher Validierungsschritt nach der Prompt-Anreicherung dienen.
-
-### 5. 🔧 `disable-model-invocation` Refusal verbessert (v2.1.222, 4. Aug.)
-
-Wenn Claude ein Skill mit `disable-model-invocation`-Flag invoziert, wird die Ablehnung jetzt klarer kommuniziert.
-
-**Typ:** 🔧 Verbesserung
-**Relevanz:** 6 Skills im Setup verwenden `disable-model-invocation` (`skeleton-finder`, `security-pre-commit`, `repository-pattern-scaffold`, `feature-pipeline`, `error-envelope-generator`, `setup-pm`). Die UX bei versehentlicher Invokation wird besser. **Kein Handlungsbedarf.**
-
-### 6. 🆕 Focus View für VSCode (v2.1.221, 4. Aug.)
-
-Neuer Toggle `Ctrl+Alt+F` im Chat-Menü: versteckt Tool-Aktivität hinter expandierbaren Per-Turn-Summaries. Reduziert visuelles Rauschen bei komplexen Workflows.
+`strictKnownMarketplaces` und `blockedMarketplaces` akzeptieren jetzt `"owner/*"`-Einträge für Org-weite Repo-Kontrolle.
 
 **Typ:** 🆕 Neues Feature
-**Relevanz:** **Aktion:** Unter `CLAUDE.md` → "Key Commands" oder in einem neuen Abschnitt "VSCode Tips" den Shortcut `Ctrl+Alt+F` dokumentieren — besonders nützlich bei `/orchestrate` und Multi-Agent-Workflows.
+**Relevanz:** Das Setup nutzt Plugins aus 8 verschiedenen Marketplace-Quellen. **Aktion:** In `settings.json` können jetzt ganze Orgs erlaubt werden, z.B. `"anthropics/*"` oder `"levnikolaevich/*"` statt einzelner Repos. Vereinfacht die Marketplace-Verwaltung.
 
-### 7. 🔌 Python SDK v0.120.2: MCP SDK v2 Support (28. Juli)
+### 7. 🆕 `/teleport` für Cloud Sessions (v2.1.223, 6. Aug.)
+
+Cloud-Sessions zeigen jetzt einen Hint mit `/teleport`, um die Session lokal fortzusetzen via `claude --teleport <session id>`.
+
+**Typ:** 🆕 Neues Feature
+**Relevanz:** **Aktion:** In `CLAUDE.md` unter "Key Commands" oder einem neuen Abschnitt "Cloud/Remote" dokumentieren: `/teleport` — Session lokal fortsetzen.
+
+### 8. 🔌 Python SDK v0.120.2: MCP SDK v2 Support (28. Juli)
 
 Das Python SDK unterstützt jetzt MCP SDK v2 neben v1.
 
@@ -55,54 +67,75 @@ Das Python SDK unterstützt jetzt MCP SDK v2 neben v1.
 
 ## 🟡 Interessant, kein sofortiger Handlungsbedarf
 
+### Inference Hooks Beta für Enterprise (Plattform, 5. Aug.)
+
+Enterprise-Organisationen können jetzt einen eigenen AI-Security-Server einbinden, der jeden Prompt (claude.ai, Cowork, Claude Code) vor der Inferenz prüft und erlaubt/ablehnt. Betrifft nur Enterprise-Kunden, aber zeigt die Richtung: externe Compliance-Kontrolle über Claude Code Prompts.
+
+### Claude Opus 4.1 retired (Plattform, 5. Aug.)
+
+`claude-opus-4-1-20250805` gibt jetzt Fehler zurück. Keine Referenzen im Setup gefunden — kein Handlungsbedarf.
+
+### `CLAUDE_CODE_DISABLE_1M_CONTEXT` Verhalten geändert (v2.1.223)
+
+Diese Env-Variable hält jetzt alle Claude-Modelle mit nativem 1M-Fenster auf 200K via Auto-Compaction (vorher nur bestimmte Modelle). Startup-Warning wenn Auto-Compaction nicht auf 200K begrenzt. Keine Referenz im Setup, aber relevant wenn du Kontextfenster manuell steuerst.
+
+### Gateway Model Discovery Fix (v2.1.223)
+
+Claude-Modelle mit Provider-Prefixen (`vertex_ai/claude-*`, `bedrock/anthropic.claude-*`) wurden in der Gateway-Model-Discovery versteckt. Jetzt gefixt. Relevant wenn du Claude Code über Bedrock/Vertex betreibst.
+
 ### Auto-Mode Security: SendMessage Permission Classifier (v2.1.222)
 
-Nachrichten an andere Agent-Sessions via `SendMessage` werden jetzt vor dem Versand vom Permission Classifier evaluiert. Stärkt die Sicherheit bei Multi-Agent-Orchestrierung — relevant für die 182 Agents im Setup, aber kein Handlungsbedarf.
+Nachrichten an andere Agent-Sessions via `SendMessage` werden jetzt vor dem Versand vom Permission Classifier evaluiert. Stärkt die Sicherheit bei Multi-Agent-Orchestrierung.
 
-### Sandbox Credential Masking für Linux/WSL (v2.1.221)
+### `disable-model-invocation` Refusal verbessert (v2.1.222)
 
-Neuer Mode `"mask"` für Sandbox-Credential-Dateien: erstellt Sentinel-Kopie mit Regex-Extrakt. Nützlich wenn Claude Code auf Linux/WSL mit sensiblen Credentials läuft.
-
-### WebSearch funktioniert jetzt bei Effort xhigh/max (v2.1.221)
-
-WebSearch schlug fehl wenn der Reasoning-Effort auf `xhigh` oder `max` stand und kein Thinking aktiviert war. Jetzt gefixt. Relevant für Skills die WebSearch mit hohem Effort nutzen.
-
-### MCP-Server aus `--mcp-config` in Print Mode (v2.1.221)
-
-MCP-Server die via `--mcp-config` konfiguriert wurden, verbinden sich jetzt vor dem ersten Turn auch im Print Mode. Relevant für CI/CD-Pipelines mit MCP-Servern.
-
-### Dreams unterstützt Claude Opus 5 (1. Aug.)
-
-Die Dreams Research Preview (Managed Agents) unterstützt jetzt auch Claude Opus 5. Betrifft die API, nicht direkt Claude Code.
+6 Skills im Setup verwenden dieses Flag. Die UX bei versehentlicher Invokation wird besser. Kein Handlungsbedarf.
 
 ### Ultraplan entfernt (v2.1.222)
 
-Das experimentelle Ultraplan-Feature wurde entfernt. Keine Referenzen im Setup gefunden — kein Handlungsbedarf.
+Keine Referenzen im Setup gefunden — kein Handlungsbedarf.
+
+### Dreams unterstützt Claude Opus 5 (Plattform, 1. Aug.)
+
+Dreams Research Preview (Managed Agents) unterstützt jetzt Opus 5. Betrifft die API, nicht direkt Claude Code.
+
+### Model-Restriction-Warnungen für Subagents (v2.1.223)
+
+Workflow-Agents, geforkte Skills, Slash-Commands und wiederaufgenommene Background-Agents zeigen jetzt eine Warnung, wenn ihr angefordertes Subagent-Modell eingeschränkt ist. Verbessert Debugging bei Modellwechseln.
 
 ## ⚪ Zur Kenntnis
 
 | Änderung | Version | Typ |
 |----------|---------|-----|
-| `/usage-credits` Fehlermeldung korrigiert | v2.1.222 | 🐛 |
-| PowerShell Path-Handling mit Anführungszeichen gefixt | v2.1.221 | 🐛 |
+| Resumed Sessions nach `/cd` kommen nicht mehr leer zurück | v2.1.223 | 🐛 |
+| Managed Settings: Server-Settings deaktivieren nicht mehr lokale `managed-settings.json` | v2.1.223 | 🐛 |
+| Sandboxed Commands auf Linux bei `denyWrite` über Working Directory gefixt | v2.1.223 | 🐛 |
+| Geforkte Background-Agents bleiben nicht mehr bei "already resuming" hängen | v2.1.223 | 🐛 |
+| Resumed Sessions mit malformed Diagnostics-Attachment gefixt | v2.1.223 | 🐛 |
+| `/usage-credits` Fehlermeldung auf Team/Enterprise korrigiert | v2.1.222 | 🐛 |
+| `/usage` falsche Attribution an MCP-Server gefixt | v2.1.222 | 🐛 |
 | Startup Connectivity Check hinter HTTPS-Proxy gefixt | v2.1.222 | 🐛 |
-| Org-restricted Model-Aliase fallen jetzt auf neustes erlaubtes Modell zurück (statt Parent) | v2.1.222 | 🔧 |
-| Sandboxed Large Uploads TLS-Fehler gefixt | v2.1.221 | 🐛 |
+| Stream Idle Timeout bei custom `ANTHROPIC_BASE_URL` gefixt | v2.1.222 | 🐛 |
+| `SendMessage` kürzt jetzt lange Summaries statt sie abzulehnen | v2.1.222 | 🔧 |
+| Org-restricted Model-Aliase fallen auf neustes erlaubtes Modell zurück | v2.1.222 | 🔧 |
 | Verbesserte `/diff`-Ansicht für Raw Git Blob Content | v2.1.222 | 🔧 |
-| Python SDK v0.120.1: MCP extra auf <2 gepinnt | v0.120.1 | 🐛 |
+| Vim Mode: Yank-Register und Undo gefixt | v2.1.222 | 🐛 |
+| PR-Linking nach Branch-Push (inkl. GitHub REST API) gefixt | v2.1.222 | 🐛 |
+| Python SDK v0.120.0: Claude Opus 5 Modell, Tool-Addition/Removal-Blocks | v0.120.0 | 🆕 |
+| Python SDK v0.119.0: Neuer Stop-Reason `model_context_window_exceeded` | v0.119.0 | 🆕 |
 
 ## 📊 Zusammenfassung
 
 | Kategorie | Anzahl |
 |-----------|--------|
-| 🔴 Sofort relevant | 7 |
-| 🟡 Interessant | 6 |
-| ⚪ Zur Kenntnis | 7 |
-| Davon sicherheitsrelevant | 3 |
+| 🔴 Sofort relevant | 8 |
+| 🟡 Interessant | 9 |
+| ⚪ Zur Kenntnis | 16 |
+| Davon sicherheitskritisch | 6 |
 
-**Hinweis:** Die Reports KW 30 und KW 31 fehlen — die Änderungen aus diesen Wochen (insbesondere Claude Opus 5 Launch am 24. Juli) wurden im Kontext erwähnt, aber nicht als separate Reports erstellt.
+**Wichtigste Aktion:** Claude Code auf v2.1.223 updaten — 4 Security-Fixes + `/code-review ultra` + `/review`-Alias.
 
 **Quellen:**
-- platform.claude.com/docs/en/release-notes/overview
-- github.com/anthropics/claude-code/releases (v2.1.221, v2.1.222)
-- github.com/anthropics/anthropic-sdk-python/releases (v0.120.1, v0.120.2)
+- platform.claude.com/docs/en/release-notes/overview (5. Aug., 1. Aug.)
+- github.com/anthropics/claude-code/releases (v2.1.222, v2.1.223)
+- github.com/anthropics/anthropic-sdk-python/releases (v0.119.0 – v0.120.2)
