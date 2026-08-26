@@ -1,3 +1,10 @@
+---
+name: auth-tester
+description: "Specialized agent for comprehensive authentication and login flow testing driven by login constitution files. Use when testing sign-in, session, or auth-regression scenarios against a defined login constitution."
+model: inherit
+color: red
+---
+
 # Auth Tester Agent
 
 ## Agent Purpose

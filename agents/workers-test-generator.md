@@ -1,5 +1,7 @@
 ---
-description: Autonomous test generation agent for Cloudflare Workers. Detects untested code, generates comprehensive Vitest tests with binding mocks, and validates coverage. Auto-applies generated tests for user review via git diff.
+name: workers-test-generator
+description: |-
+  Autonomous test generation agent for Cloudflare Workers. Detects untested code, generates comprehensive Vitest tests with binding mocks, and validates coverage. Auto-applies generated tests for user review via git diff.
 model: claude-sonnet-4.5
 color: blue
 allowed-tools:

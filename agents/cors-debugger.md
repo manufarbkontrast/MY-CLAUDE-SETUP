@@ -1,25 +1,25 @@
 ---
 name: cors-debugger
-description: Use this agent when the user encounters "CORS errors", "browser upload fails", "access-control-allow-origin", "CORS policy blocked", or needs CORS troubleshooting. Examples:
+description: |-
+  Use this agent when the user encounters "CORS errors", "browser upload fails", "access-control-allow-origin", "CORS policy blocked", or needs CORS troubleshooting. Examples:
 
-<example>
-Context: User getting CORS errors in browser console when uploading to R2
-user: "My browser can't upload to R2, getting CORS error"
-assistant: "I'll use the cors-debugger agent to diagnose your CORS configuration and provide a fix."
-<commentary>
-CORS errors are common and require systematic debugging of headers, methods, origins, and R2 bucket configuration.
-</commentary>
-</example>
+  <example>
+  Context: User getting CORS errors in browser console when uploading to R2
+  user: "My browser can't upload to R2, getting CORS error"
+  assistant: "I'll use the cors-debugger agent to diagnose your CORS configuration and provide a fix."
+  <commentary>
+  CORS errors are common and require systematic debugging of headers, methods, origins, and R2 bucket configuration.
+  </commentary>
+  </example>
 
-<example>
-Context: User configured CORS but still getting errors
-user: "I set up CORS but downloads still fail with CORS error"
-assistant: "I'll use the cors-debugger agent to identify the missing CORS configuration and fix it."
-<commentary>
-CORS issues can be subtle - wrong headers, missing methods, or incorrect origin patterns.
-</commentary>
-</example>
-
+  <example>
+  Context: User configured CORS but still getting errors
+  user: "I set up CORS but downloads still fail with CORS error"
+  assistant: "I'll use the cors-debugger agent to identify the missing CORS configuration and fix it."
+  <commentary>
+  CORS issues can be subtle - wrong headers, missing methods, or incorrect origin patterns.
+  </commentary>
+  </example>
 model: inherit
 color: yellow
 tools: ["Read", "Bash", "WebFetch", "Grep"]

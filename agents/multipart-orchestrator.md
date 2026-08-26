@@ -1,25 +1,25 @@
 ---
 name: multipart-orchestrator
-description: Use this agent when the user needs to "upload large files", "implement multipart upload", "handle file chunks", "upload files >100MB", or encountering upload failures with large files. Examples:
+description: |-
+  Use this agent when the user needs to "upload large files", "implement multipart upload", "handle file chunks", "upload files >100MB", or encountering upload failures with large files. Examples:
 
-<example>
-Context: User needs to upload video files that are several GB
-user: "Help me implement large file uploads to R2 for videos"
-assistant: "I'll use the multipart-orchestrator agent to implement a production-ready multipart upload workflow with proper chunking and error recovery."
-<commentary>
-Multipart uploads require orchestration of multiple parts, error handling, progress tracking, and completion logic.
-</commentary>
-</example>
+  <example>
+  Context: User needs to upload video files that are several GB
+  user: "Help me implement large file uploads to R2 for videos"
+  assistant: "I'll use the multipart-orchestrator agent to implement a production-ready multipart upload workflow with proper chunking and error recovery."
+  <commentary>
+  Multipart uploads require orchestration of multiple parts, error handling, progress tracking, and completion logic.
+  </commentary>
+  </example>
 
-<example>
-Context: User experiencing timeouts with large file uploads
-user: "My 500MB file uploads keep failing"
-assistant: "I'll use the multipart-orchestrator agent to set up multipart uploads which handle large files reliably."
-<commentary>
-Large files need multipart to avoid timeouts and enable resume on failure.
-</commentary>
-</example>
-
+  <example>
+  Context: User experiencing timeouts with large file uploads
+  user: "My 500MB file uploads keep failing"
+  assistant: "I'll use the multipart-orchestrator agent to set up multipart uploads which handle large files reliably."
+  <commentary>
+  Large files need multipart to avoid timeouts and enable resume on failure.
+  </commentary>
+  </example>
 model: inherit
 color: green
 tools: ["Read", "Write", "Edit", "Bash"]

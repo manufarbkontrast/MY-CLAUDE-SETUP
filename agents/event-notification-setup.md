@@ -1,25 +1,25 @@
 ---
 name: event-notification-setup
-description: Use this agent when the user wants to "trigger on upload", "process R2 events", "automate on file upload", "respond to R2 changes", or needs event-driven R2 workflows. Examples:
+description: |-
+  Use this agent when the user wants to "trigger on upload", "process R2 events", "automate on file upload", "respond to R2 changes", or needs event-driven R2 workflows. Examples:
 
-<example>
-Context: User wants to automatically resize images when uploaded to R2
-user: "Automatically resize images when they're uploaded to R2"
-assistant: "I'll use the event-notification-setup agent to configure event notifications and set up automatic image processing on upload."
-<commentary>
-Event-driven workflows require proper event subscription setup, Queue integration, Worker configuration, and error handling.
-</commentary>
-</example>
+  <example>
+  Context: User wants to automatically resize images when uploaded to R2
+  user: "Automatically resize images when they're uploaded to R2"
+  assistant: "I'll use the event-notification-setup agent to configure event notifications and set up automatic image processing on upload."
+  <commentary>
+  Event-driven workflows require proper event subscription setup, Queue integration, Worker configuration, and error handling.
+  </commentary>
+  </example>
 
-<example>
-Context: User needs to trigger webhook when files are deleted
-user: "Send a webhook when files are deleted from R2"
-assistant: "I'll use the event-notification-setup agent to configure delete event notifications and webhook integration."
-<commentary>
-Event notifications enable reactive workflows without polling, ideal for automation and integrations.
-</commentary>
-</example>
-
+  <example>
+  Context: User needs to trigger webhook when files are deleted
+  user: "Send a webhook when files are deleted from R2"
+  assistant: "I'll use the event-notification-setup agent to configure delete event notifications and webhook integration."
+  <commentary>
+  Event notifications enable reactive workflows without polling, ideal for automation and integrations.
+  </commentary>
+  </example>
 model: inherit
 color: magenta
 tools: ["Read", "Write", "Edit", "Bash"]

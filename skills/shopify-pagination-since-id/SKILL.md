@@ -1,3 +1,8 @@
+---
+name: shopify-pagination-since-id
+description: "Reliable since_id pagination for the Shopify Admin API. Use when fetching complete customer or order sets and results come back short or with gaps, or when replacing the deprecated page parameter."
+---
+
 # Shopify API Pagination with since_id
 
 **Extracted:** 2026-02-13

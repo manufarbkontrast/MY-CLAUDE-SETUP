@@ -1,34 +1,34 @@
 ---
 name: queue-debugger
-description: Use this agent when the user encounters "queue not delivering messages", "consumer errors", "DLQ filling up", "throughput issues", "message backlog", "queue timeout errors", or needs systematic Cloudflare Queues troubleshooting. Examples:
+description: |-
+  Use this agent when the user encounters "queue not delivering messages", "consumer errors", "DLQ filling up", "throughput issues", "message backlog", "queue timeout errors", or needs systematic Cloudflare Queues troubleshooting. Examples:
 
-<example>
-Context: Queue messages aren't being delivered to consumer
-user: "My queue messages aren't being processed, they just sit there"
-assistant: "I'll use the queue-debugger agent to systematically diagnose the issue through 9-phase analysis of configuration, bindings, consumer setup, and message flow."
-<commentary>
-Systematic diagnostic approach is needed to identify root cause across multiple potential failure points.
-</commentary>
-</example>
+  <example>
+  Context: Queue messages aren't being delivered to consumer
+  user: "My queue messages aren't being processed, they just sit there"
+  assistant: "I'll use the queue-debugger agent to systematically diagnose the issue through 9-phase analysis of configuration, bindings, consumer setup, and message flow."
+  <commentary>
+  Systematic diagnostic approach is needed to identify root cause across multiple potential failure points.
+  </commentary>
+  </example>
 
-<example>
-Context: Consumer throwing errors and messages going to DLQ
-user: "Consumer is failing and DLQ is filling up with messages"
-assistant: "I'll use the queue-debugger agent to analyze the DLQ messages, identify error patterns, and recommend fixes."
-<commentary>
-DLQ analysis requires inspecting message patterns and consumer error logs to find root cause.
-</commentary>
-</example>
+  <example>
+  Context: Consumer throwing errors and messages going to DLQ
+  user: "Consumer is failing and DLQ is filling up with messages"
+  assistant: "I'll use the queue-debugger agent to analyze the DLQ messages, identify error patterns, and recommend fixes."
+  <commentary>
+  DLQ analysis requires inspecting message patterns and consumer error logs to find root cause.
+  </commentary>
+  </example>
 
-<example>
-Context: Queue performance degradation
-user: "Queue was working fine but now messages are delayed"
-assistant: "I'll use the queue-debugger agent to check throughput limits, consumer concurrency, and batch settings for bottlenecks."
-<commentary>
-Performance issues require analyzing multiple metrics and configuration settings.
-</commentary>
-</example>
-
+  <example>
+  Context: Queue performance degradation
+  user: "Queue was working fine but now messages are delayed"
+  assistant: "I'll use the queue-debugger agent to check throughput limits, consumer concurrency, and batch settings for bottlenecks."
+  <commentary>
+  Performance issues require analyzing multiple metrics and configuration settings.
+  </commentary>
+  </example>
 model: inherit
 color: blue
 tools: ["Read", "Grep", "Glob", "Bash"]

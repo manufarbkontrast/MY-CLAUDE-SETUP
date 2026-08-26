@@ -1,3 +1,8 @@
+---
+name: social-media-browser-scraping
+description: "Browser-automation approach for extracting accurate live follower, following, and post counts from Instagram and TikTok profile headers, where API and meta-tag scraping return cached or rounded values. Use when building KPI dashboards that need exact social metrics."
+---
+
 # Social Media Profile Scraping via Browser
 
 **Extracted:** 2026-02-13

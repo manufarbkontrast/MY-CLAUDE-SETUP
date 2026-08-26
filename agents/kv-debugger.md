@@ -1,5 +1,7 @@
 ---
-description: This agent should be used when the user asks about "kv error", "KV_ERROR", "429 rate limit", "kv not working", "eventual consistency", "kv namespace not found", "kv timeout", or mentions debugging, troubleshooting, or fixing issues with Cloudflare Workers KV. The agent diagnoses common KV errors, validates configuration, provides error-specific solutions, and helps debug consistency and rate limit issues.
+name: kv-debugger
+description: |-
+  This agent should be used when the user asks about "kv error", "KV_ERROR", "429 rate limit", "kv not working", "eventual consistency", "kv namespace not found", "kv timeout", or mentions debugging, troubleshooting, or fixing issues with Cloudflare Workers KV. The agent diagnoses common KV errors, validates configuration, provides error-specific solutions, and helps debug consistency and rate limit issues.
 ---
 
 # KV Debugger Agent

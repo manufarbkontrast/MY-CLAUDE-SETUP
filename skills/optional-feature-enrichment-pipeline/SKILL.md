@@ -1,3 +1,8 @@
+---
+name: optional-feature-enrichment-pipeline
+description: "Three-layer graceful-degradation pattern for adding an optional enrichment step (scraping, third-party API) to an existing API route without letting its failures break the primary response. Use when a new data source should be env-var toggleable and fail soft."
+---
+
 # Optional Feature Enrichment Pipeline
 
 **Extracted:** 2025-02-13

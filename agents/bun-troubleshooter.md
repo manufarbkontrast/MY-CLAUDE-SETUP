@@ -1,34 +1,34 @@
 ---
 name: bun-troubleshooter
-description: Use this agent when the user encounters errors, crashes, or unexpected behavior in their Bun application. Examples:
+description: |-
+  Use this agent when the user encounters errors, crashes, or unexpected behavior in their Bun application. Examples:
 
-<example>
-Context: User has a runtime error they can't resolve
-user: "My Bun server keeps crashing with a segmentation fault"
-assistant: "I'll use the bun-troubleshooter agent to diagnose and fix this crash issue."
-<commentary>
-Segmentation faults are serious issues requiring systematic diagnosis of native modules and memory issues.
-</commentary>
-</example>
+  <example>
+  Context: User has a runtime error they can't resolve
+  user: "My Bun server keeps crashing with a segmentation fault"
+  assistant: "I'll use the bun-troubleshooter agent to diagnose and fix this crash issue."
+  <commentary>
+  Segmentation faults are serious issues requiring systematic diagnosis of native modules and memory issues.
+  </commentary>
+  </example>
 
-<example>
-Context: User has test failures
-user: "My tests pass locally but fail in CI"
-assistant: "Let me use the bun-troubleshooter agent to investigate the CI test failures."
-<commentary>
-Environment-specific test failures require analyzing differences between local and CI environments.
-</commentary>
-</example>
+  <example>
+  Context: User has test failures
+  user: "My tests pass locally but fail in CI"
+  assistant: "Let me use the bun-troubleshooter agent to investigate the CI test failures."
+  <commentary>
+  Environment-specific test failures require analyzing differences between local and CI environments.
+  </commentary>
+  </example>
 
-<example>
-Context: Build errors preventing deployment
-user: "Bun build is failing with module resolution errors"
-assistant: "I'll launch the bun-troubleshooter agent to resolve these build configuration issues."
-<commentary>
-Build failures require checking bundler configuration, entry points, and module paths.
-</commentary>
-</example>
-
+  <example>
+  Context: Build errors preventing deployment
+  user: "Bun build is failing with module resolution errors"
+  assistant: "I'll launch the bun-troubleshooter agent to resolve these build configuration issues."
+  <commentary>
+  Build failures require checking bundler configuration, entry points, and module paths.
+  </commentary>
+  </example>
 model: inherit
 color: red
 tools: ["Read", "Grep", "Glob", "Bash"]

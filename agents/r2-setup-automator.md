@@ -1,25 +1,25 @@
 ---
 name: r2-setup-automator
-description: Use this agent when the user asks to "set up R2", "create R2 bucket", "configure R2 binding", "add R2 to my project", or needs complete R2 setup automation. Examples:
+description: |-
+  Use this agent when the user asks to "set up R2", "create R2 bucket", "configure R2 binding", "add R2 to my project", or needs complete R2 setup automation. Examples:
 
-<example>
-Context: User starting new project that needs file storage
-user: "Set up R2 for my project to store user uploads"
-assistant: "I'll use the r2-setup-automator agent to handle the complete R2 setup workflow including bucket creation, binding configuration, and TypeScript types."
-<commentary>
-This agent automates the entire R2 setup process from scratch, including wrangler configuration, TypeScript types, and example code.
-</commentary>
-</example>
+  <example>
+  Context: User starting new project that needs file storage
+  user: "Set up R2 for my project to store user uploads"
+  assistant: "I'll use the r2-setup-automator agent to handle the complete R2 setup workflow including bucket creation, binding configuration, and TypeScript types."
+  <commentary>
+  This agent automates the entire R2 setup process from scratch, including wrangler configuration, TypeScript types, and example code.
+  </commentary>
+  </example>
 
-<example>
-Context: User has existing Worker and wants to add R2
-user: "Add R2 storage to my Worker"
-assistant: "I'll use the r2-setup-automator agent to configure R2 for your existing Worker project."
-<commentary>
-The agent handles setup for both new and existing projects, configuring bindings and types correctly.
-</commentary>
-</example>
-
+  <example>
+  Context: User has existing Worker and wants to add R2
+  user: "Add R2 storage to my Worker"
+  assistant: "I'll use the r2-setup-automator agent to configure R2 for your existing Worker project."
+  <commentary>
+  The agent handles setup for both new and existing projects, configuring bindings and types correctly.
+  </commentary>
+  </example>
 model: inherit
 color: blue
 tools: ["Read", "Write", "Edit", "Bash", "Grep"]

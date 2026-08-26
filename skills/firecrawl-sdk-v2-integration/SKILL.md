@@ -1,3 +1,8 @@
+---
+name: firecrawl-sdk-v2-integration
+description: "Correct API usage for the Firecrawl JS SDK v2 (@mendable/firecrawl-js) - the default Firecrawl export, FirecrawlClientOptions, and scrape() rather than the old scrapeUrl(). Use when integrating or debugging Firecrawl in a TypeScript/Next.js app, especially on SDK-related build failures."
+---
+
 # Firecrawl JS SDK v2 — Correct API Usage
 
 **Extracted:** 2025-02-13

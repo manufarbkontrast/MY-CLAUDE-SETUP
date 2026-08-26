@@ -1,34 +1,34 @@
 ---
 name: bun-migration-assistant
-description: Use this agent when the user wants to migrate from Node.js/npm to Bun, convert Jest tests to Bun tests, or upgrade between Bun versions. Examples:
+description: |-
+  Use this agent when the user wants to migrate from Node.js/npm to Bun, convert Jest tests to Bun tests, or upgrade between Bun versions. Examples:
 
-<example>
-Context: User wants to migrate from Node.js
-user: "Help me migrate my Express app from Node.js to Bun"
-assistant: "I'll use the bun-migration-assistant agent to plan and execute the migration."
-<commentary>
-Express migration requires updating scripts, checking API compatibility, and testing.
-</commentary>
-</example>
+  <example>
+  Context: User wants to migrate from Node.js
+  user: "Help me migrate my Express app from Node.js to Bun"
+  assistant: "I'll use the bun-migration-assistant agent to plan and execute the migration."
+  <commentary>
+  Express migration requires updating scripts, checking API compatibility, and testing.
+  </commentary>
+  </example>
 
-<example>
-Context: User has Jest tests to convert
-user: "I need to convert our Jest test suite to use Bun's test runner"
-assistant: "Let me launch the bun-migration-assistant agent to migrate your tests to Bun."
-<commentary>
-Jest to Bun migration involves updating imports, converting mocks, and adjusting config.
-</commentary>
-</example>
+  <example>
+  Context: User has Jest tests to convert
+  user: "I need to convert our Jest test suite to use Bun's test runner"
+  assistant: "Let me launch the bun-migration-assistant agent to migrate your tests to Bun."
+  <commentary>
+  Jest to Bun migration involves updating imports, converting mocks, and adjusting config.
+  </commentary>
+  </example>
 
-<example>
-Context: Upgrading between Bun major versions
-user: "We need to upgrade from Bun 0.x to 1.x"
-assistant: "I'll use the bun-migration-assistant agent to handle the version upgrade."
-<commentary>
-Major version upgrades require checking breaking changes and updating deprecated APIs.
-</commentary>
-</example>
-
+  <example>
+  Context: Upgrading between Bun major versions
+  user: "We need to upgrade from Bun 0.x to 1.x"
+  assistant: "I'll use the bun-migration-assistant agent to handle the version upgrade."
+  <commentary>
+  Major version upgrades require checking breaking changes and updating deprecated APIs.
+  </commentary>
+  </example>
 model: inherit
 color: cyan
 tools: ["Read", "Write", "Edit", "Grep", "Glob", "Bash"]

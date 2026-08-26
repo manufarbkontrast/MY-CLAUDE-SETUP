@@ -1,5 +1,7 @@
 ---
-description: Performance analysis and optimization agent for Cloudflare Workers. Analyzes bundle size, caching, memory usage, and CPU time. Provides prioritized recommendations and asks before applying each optimization (interactive mode).
+name: workers-performance-analyzer
+description: |-
+  Performance analysis and optimization agent for Cloudflare Workers. Analyzes bundle size, caching, memory usage, and CPU time. Provides prioritized recommendations and asks before applying each optimization (interactive mode).
 model: claude-sonnet-4.5
 color: purple
 allowed-tools:

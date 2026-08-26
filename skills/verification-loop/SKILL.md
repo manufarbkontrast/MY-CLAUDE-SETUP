@@ -1,3 +1,8 @@
+---
+name: verification-loop
+description: "Staged quality gate for a Claude Code session - build, type check, lint, tests, and secrets audit, each stopping on failure. Use after completing a feature or refactor, and before opening a PR."
+---
+
 # Verification Loop Skill
 
 A comprehensive verification system for Claude Code sessions.

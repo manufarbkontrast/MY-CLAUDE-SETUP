@@ -1,3 +1,8 @@
+---
+name: claude-code
+description: "Expert guidance on Claude Code itself - features, installation and authentication, slash commands, Agent Skills, MCP server configuration, hooks and plugins, IDE and CI/CD integration, enterprise deployment, extended thinking, caching, and cost tracking. Use when the user asks how to use, configure, extend, or troubleshoot Claude Code."
+---
+
 # Claude Code Expert
 
 Claude Code is Anthropic's agentic coding tool that lives in the terminal and helps turn ideas into code faster. It combines autonomous planning, execution, and validation with extensibility through skills, plugins, MCP servers, and hooks.

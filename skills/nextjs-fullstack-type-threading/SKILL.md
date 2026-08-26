@@ -1,3 +1,8 @@
+---
+name: nextjs-fullstack-type-threading
+description: "Checklist for threading a new data field through every type layer of a Next.js full-stack app - domain type, API response type, UI data type, hook normalizer, hook merger, and component. Use when adding fields to an API response, or when new data silently disappears before reaching the UI."
+---
+
 # Next.js Full-Stack Type Threading
 
 **Extracted:** 2025-02-13

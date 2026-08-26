@@ -1,5 +1,7 @@
 ---
-description: Autonomous security auditing agent for Cloudflare Workers. Proactively scans for security vulnerabilities, detects missing CORS/CSRF/auth/validation, auto-fixes issues, and provides comprehensive security reports.
+name: workers-security-auditor
+description: |-
+  Autonomous security auditing agent for Cloudflare Workers. Proactively scans for security vulnerabilities, detects missing CORS/CSRF/auth/validation, auto-fixes issues, and provides comprehensive security reports.
 model: claude-sonnet-4.5
 color: red
 allowed-tools:

@@ -1,5 +1,7 @@
 ---
-description: This agent should be used when the user asks to "optimize kv", "improve kv performance", "reduce kv costs", "kv best practices", "make kv faster", or mentions performance tuning, cost optimization, or caching strategies for Cloudflare Workers KV. The agent analyzes KV usage patterns, identifies anti-patterns, suggests performance improvements, and can automatically apply optimizations.
+name: kv-optimizer
+description: |-
+  This agent should be used when the user asks to "optimize kv", "improve kv performance", "reduce kv costs", "kv best practices", "make kv faster", or mentions performance tuning, cost optimization, or caching strategies for Cloudflare Workers KV. The agent analyzes KV usage patterns, identifies anti-patterns, suggests performance improvements, and can automatically apply optimizations.
 ---
 
 # KV Optimizer Agent

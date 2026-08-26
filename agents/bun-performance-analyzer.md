@@ -1,34 +1,34 @@
 ---
 name: bun-performance-analyzer
-description: Use this agent when the user wants to optimize performance, analyze bottlenecks, or improve efficiency of their Bun application. Examples:
+description: |-
+  Use this agent when the user wants to optimize performance, analyze bottlenecks, or improve efficiency of their Bun application. Examples:
 
-<example>
-Context: User has slow API responses
-user: "My Bun API endpoints are taking too long to respond"
-assistant: "I'll use the bun-performance-analyzer agent to identify and fix the performance bottlenecks."
-<commentary>
-Slow APIs require profiling request handlers, database queries, and response serialization.
-</commentary>
-</example>
+  <example>
+  Context: User has slow API responses
+  user: "My Bun API endpoints are taking too long to respond"
+  assistant: "I'll use the bun-performance-analyzer agent to identify and fix the performance bottlenecks."
+  <commentary>
+  Slow APIs require profiling request handlers, database queries, and response serialization.
+  </commentary>
+  </example>
 
-<example>
-Context: User wants to reduce bundle size
-user: "My Bun build output is too large for deployment"
-assistant: "Let me launch the bun-performance-analyzer agent to optimize your bundle size."
-<commentary>
-Bundle optimization involves analyzing dependencies, code splitting, and tree shaking.
-</commentary>
-</example>
+  <example>
+  Context: User wants to reduce bundle size
+  user: "My Bun build output is too large for deployment"
+  assistant: "Let me launch the bun-performance-analyzer agent to optimize your bundle size."
+  <commentary>
+  Bundle optimization involves analyzing dependencies, code splitting, and tree shaking.
+  </commentary>
+  </example>
 
-<example>
-Context: High memory usage
-user: "My Bun server's memory keeps growing over time"
-assistant: "I'll use the bun-performance-analyzer agent to investigate the memory leak."
-<commentary>
-Memory growth requires analyzing object allocations, closures, and event listeners.
-</commentary>
-</example>
-
+  <example>
+  Context: High memory usage
+  user: "My Bun server's memory keeps growing over time"
+  assistant: "I'll use the bun-performance-analyzer agent to investigate the memory leak."
+  <commentary>
+  Memory growth requires analyzing object allocations, closures, and event listeners.
+  </commentary>
+  </example>
 model: inherit
 color: yellow
 tools: ["Read", "Grep", "Glob", "Bash"]

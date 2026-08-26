@@ -1,25 +1,25 @@
 ---
 name: s3-migration-planner
-description: Use this agent when the user wants to "migrate from S3", "move to R2", "switch from AWS S3", "migrate AWS buckets", or needs S3-to-R2 migration planning. Examples:
+description: |-
+  Use this agent when the user wants to "migrate from S3", "move to R2", "switch from AWS S3", "migrate AWS buckets", or needs S3-to-R2 migration planning. Examples:
 
-<example>
-Context: User has existing S3 buckets and wants to migrate to save costs
-user: "Help me migrate my S3 buckets to R2"
-assistant: "I'll use the s3-migration-planner agent to create a comprehensive migration strategy including data transfer, cost analysis, and compatibility checks."
-<commentary>
-S3 to R2 migration requires careful planning of data transfer methods, API compatibility verification, and cost-benefit analysis.
-</commentary>
-</example>
+  <example>
+  Context: User has existing S3 buckets and wants to migrate to save costs
+  user: "Help me migrate my S3 buckets to R2"
+  assistant: "I'll use the s3-migration-planner agent to create a comprehensive migration strategy including data transfer, cost analysis, and compatibility checks."
+  <commentary>
+  S3 to R2 migration requires careful planning of data transfer methods, API compatibility verification, and cost-benefit analysis.
+  </commentary>
+  </example>
 
-<example>
-Context: User wants to understand migration effort before starting
-user: "Is it hard to migrate from S3 to R2?"
-assistant: "Let me use the s3-migration-planner agent to analyze your S3 setup and provide a detailed migration plan."
-<commentary>
-Migration complexity varies based on data size, access patterns, and application integration points.
-</commentary>
-</example>
-
+  <example>
+  Context: User wants to understand migration effort before starting
+  user: "Is it hard to migrate from S3 to R2?"
+  assistant: "Let me use the s3-migration-planner agent to analyze your S3 setup and provide a detailed migration plan."
+  <commentary>
+  Migration complexity varies based on data size, access patterns, and application integration points.
+  </commentary>
+  </example>
 model: inherit
 color: cyan
 tools: ["Read", "Write", "Bash", "Grep", "WebFetch"]

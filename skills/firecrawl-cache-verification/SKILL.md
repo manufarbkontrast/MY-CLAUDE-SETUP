@@ -1,3 +1,8 @@
+---
+name: firecrawl-cache-verification
+description: "Two-step verification pattern for Firecrawl scrapes whose meta-tag data (og:description and friends) may be CDN-cached and stale. Use when scraped counts or values look wrong or accuracy is critical, and you need to confirm them against the live page via browser automation."
+---
+
 # Firecrawl Meta-Tag Cache Verification Pattern
 
 **Extracted:** 2026-02-13

@@ -1,5 +1,7 @@
 ---
-description: Autonomous validation agent for Nuxt Studio integration. Triggers when user mentions Studio setup, asks to configure Studio for Cloudflare, or reports Studio authentication issues. Validates Nuxt Content installation, version compatibility, Cloudflare configuration, OAuth environment variables, and Studio module setup. Auto-fixes trivial issues and provides detailed fix suggestions for complex problems.
+name: studio-setup-assistant
+description: |-
+  Autonomous validation agent for Nuxt Studio integration. Triggers when user mentions Studio setup, asks to configure Studio for Cloudflare, or reports Studio authentication issues. Validates Nuxt Content installation, version compatibility, Cloudflare configuration, OAuth environment variables, and Studio module setup. Auto-fixes trivial issues and provides detailed fix suggestions for complex problems.
 model: sonnet
 color: purple
 tools: [Read, Grep, Glob, Bash, Write, Edit]

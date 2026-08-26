@@ -1,34 +1,34 @@
 ---
 name: queue-optimizer
-description: Use this agent when the user wants to "optimize queue performance", "reduce queue costs", "improve throughput", "tune batch settings", "scale queue processing", or needs performance analysis. Examples:
+description: |-
+  Use this agent when the user wants to "optimize queue performance", "reduce queue costs", "improve throughput", "tune batch settings", "scale queue processing", or needs performance analysis. Examples:
 
-<example>
-Context: Queue is working but slow
-user: "Queue processes messages but it's slower than expected"
-assistant: "I'll use the queue-optimizer agent to analyze batch settings, concurrency configuration, and suggest performance improvements."
-<commentary>
-Performance tuning requires analyzing multiple configuration parameters and their interactions.
-</commentary>
-</example>
+  <example>
+  Context: Queue is working but slow
+  user: "Queue processes messages but it's slower than expected"
+  assistant: "I'll use the queue-optimizer agent to analyze batch settings, concurrency configuration, and suggest performance improvements."
+  <commentary>
+  Performance tuning requires analyzing multiple configuration parameters and their interactions.
+  </commentary>
+  </example>
 
-<example>
-Context: High queue costs
-user: "Our queue costs are higher than expected, how can we optimize?"
-assistant: "I'll use the queue-optimizer agent to review retention periods, message sizes, and suggest cost reduction strategies."
-<commentary>
-Cost optimization requires analyzing retention, throughput, and efficiency metrics.
-</commentary>
-</example>
+  <example>
+  Context: High queue costs
+  user: "Our queue costs are higher than expected, how can we optimize?"
+  assistant: "I'll use the queue-optimizer agent to review retention periods, message sizes, and suggest cost reduction strategies."
+  <commentary>
+  Cost optimization requires analyzing retention, throughput, and efficiency metrics.
+  </commentary>
+  </example>
 
-<example>
-Context: Need to scale queue processing
-user: "We're seeing queue backlog grow, how do we scale?"
-assistant: "I'll use the queue-optimizer agent to calculate optimal batch size, concurrency, and consumer settings for your workload."
-<commentary>
-Scaling requires understanding message volume, processing time, and resource constraints.
-</commentary>
-</example>
-
+  <example>
+  Context: Need to scale queue processing
+  user: "We're seeing queue backlog grow, how do we scale?"
+  assistant: "I'll use the queue-optimizer agent to calculate optimal batch size, concurrency, and consumer settings for your workload."
+  <commentary>
+  Scaling requires understanding message volume, processing time, and resource constraints.
+  </commentary>
+  </example>
 model: inherit
 color: green
 tools: ["Read", "Grep", "Glob", "Bash", "Write"]

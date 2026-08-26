@@ -1,3 +1,10 @@
+---
+name: project-config-manager
+description: "Manages the .frontend-dev/ project configuration directory - initialization, constitution file management, and retrieval of test configurations. Use when setting up or reading frontend-dev project config and constitutions."
+model: inherit
+color: cyan
+---
+
 # Project Config Manager Agent
 
 ## Agent Purpose
