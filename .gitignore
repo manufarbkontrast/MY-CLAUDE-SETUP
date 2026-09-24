@@ -9,3 +9,6 @@ registry.json
 .env
 .env.*
 !.env.example
+
+# Lokaler LLM-Harness
+.plans/logs/

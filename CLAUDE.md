@@ -96,6 +96,15 @@ GSC-MCP einrichten (kostenlos, braucht Google-Cloud-Service-Account mit Zugriff 
 claude mcp add gsc-mcp --env GSC_SERVICE_ACCOUNT_KEY_PATH=/pfad/zu/service-account-key.json -- npx -y @mikusnuz/gsc-mcp
 ```
 
+## Lokale Modelle (MacBook Pro M5 Max, 128 GB)
+
+Plan, Modellauswahl und Fahrplan: `docs/local-models/PLAN.md`.
+
+- `/local-delegate <Aufgabe>` — Claude schreibt einen Plan nach `.plans/`, ein lokales Modell setzt ihn im Git-Worktree um, ein zweites lokales Modell prüft
+- `scripts/local-llm/pipeline.sh <plan.md>` — Executor → Tests → Kritiker, bis PASS oder `MAX_ROUNDS`
+- `scripts/local-llm/critic.sh <plan.md> main` — nur lokale Zweitmeinung zu einem Diff
+- Modellrollen und Endpoints: `scripts/local-llm/models.conf`
+
 ## Rules
 
 | Rule | Purpose |
