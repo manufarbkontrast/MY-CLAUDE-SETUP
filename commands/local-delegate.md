@@ -16,6 +16,9 @@ $ARGUMENTS
    - `## Schritte` — nummeriert, jeder Schritt klein und konkret (Funktionsnamen, Signaturen, erwartetes Verhalten).
      Ein lokales 27B–35B-Modell muss ihn ohne Rückfragen umsetzen können.
    - `## Akzeptanzkriterien` — prüfbare Aussagen
+   - `## Vorgegebene Tests` — die 3–6 wichtigsten Testfälle wörtlich (Eingabe + erwartetes Ergebnis, am besten als
+     fertiger Testcode). Lokale Modelle verrechnen sich bei selbst ausgedachten Erwartungen; diese Tests darf der
+     Umsetzer nicht ändern, er ergänzt nur weitere.
    - `## Nicht tun` — was ausdrücklich außerhalb des Scopes liegt
    - eine eigene Zeile `test_command: <befehl>` (z. B. `test_command: npm test -- src/foo`)
    Wenn es noch keine Tests gibt: Schritt 1 ist, die Tests zu schreiben.
