@@ -28,7 +28,8 @@ $ARGUMENTS
 4. **Pipeline starten:** `scripts/local-llm/pipeline.sh .plans/<slug>.md` (im Hintergrund, dauert Minuten).
 5. **Ergebnis bewerten:**
    - Exit 0 (PASS): Diff im Worktree `../<repo>-local-<slug>` selbst reviewen, dann dem Nutzer die Übernahme
-     von Branch `local/<slug>` vorschlagen.
+     von Branch `local/<slug>` vorschlagen (`scripts/local-llm/accept.sh <slug>`).
+     Vorher prüfen, dass die vorgegebenen Tests unverändert sind.
    - Exit 2 (Eskalation): Logs in `.plans/logs/<slug>/` lesen, Plan präzisieren und erneut starten —
      oder die Aufgabe selbst übernehmen, wenn sie für das lokale Modell zu schwer ist.
 6. Fasse zusammen: Runden, Urteil des Kritikers, was du geprüft hast, was offen ist.
