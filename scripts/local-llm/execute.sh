@@ -31,7 +31,13 @@ if [[ -n "$FEEDBACK" && -s "$FEEDBACK" ]]; then
 $(cat "$FEEDBACK")"
 fi
 
+if [[ ! -d "$EXECUTOR_CONFIG_DIR" ]]; then
+  mkdir -p "$EXECUTOR_CONFIG_DIR"
+  echo '{}' > "$EXECUTOR_CONFIG_DIR/settings.json"
+fi
+
 cd "$WORKTREE"
+CLAUDE_CONFIG_DIR="$EXECUTOR_CONFIG_DIR" \
 ANTHROPIC_BASE_URL="$EXECUTOR_BASE_URL" \
 ANTHROPIC_AUTH_TOKEN="$EXECUTOR_TOKEN" \
 ANTHROPIC_API_KEY="" \
@@ -43,6 +49,7 @@ CLAUDE_CODE_MAX_CONTEXT_TOKENS="$EXECUTOR_CONTEXT" \
 CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC=1 \
   claude -p "$PROMPT" \
     --permission-mode acceptEdits \
+    --strict-mcp-config \
     --allowedTools "$EXECUTOR_ALLOWED_TOOLS" >&2
 
 echo "$WORKTREE"
