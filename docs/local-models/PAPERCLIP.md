@@ -62,7 +62,7 @@ Cloud-Anbieter; lokale Anbieter kommen erst mit [PR #14006](https://github.com/p
 Der Process-Adapter ist in der Oberfläche noch „Coming soon“.
 
 Lösung: Adapter **Claude Code** behalten, aber als **Command** `scripts/local-llm/paperclip-local-claude.sh`
-eintragen (keine Env-Variablen im Formular). Das Skript
+eintragen, installiert als `/Users/agents/bin/claude` (keine Env-Variablen im Formular). Das Skript
 - entfernt den Abo-Token und setzt alle `ANTHROPIC_*`-Variablen erst im Prozess auf LM Studio,
 - ersetzt Paperclips `--model …` durch das lokale Modell,
 - ersetzt `--dangerously-skip-permissions` durch `acceptEdits` + Allowlist,
@@ -71,8 +71,10 @@ eintragen (keine Env-Variablen im Formular). Das Skript
 ```bash
 # als Admin
 sudo mkdir -p /Users/agents/bin
-sudo install -o agents -m 755 ~/my-claude-setup/scripts/local-llm/paperclip-local-claude.sh /Users/agents/bin/local-claude.sh
-# Handtest als agents: echo "Antworte nur mit OK." | ~/bin/local-claude.sh   (25.09.: OK in 6 s)
+sudo install -o agents -m 755 ~/my-claude-setup/scripts/local-llm/paperclip-local-claude.sh /Users/agents/bin/claude
+# Name "claude" ist Pflicht: sonst überspringt Paperclip den Hello-Test und verweigert die Übernahme.
+# In Paperclip: Command = /Users/agents/bin/claude, Max turns 40 (wird beim Adapterwechsel auf 1000 zurückgesetzt!)
+# Handtest als agents: echo "Antworte nur mit OK." | ~/bin/claude   (25.09.: OK in 6 s)
 ```
 
 ## Offen
