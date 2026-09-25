@@ -54,6 +54,22 @@ paperclipai onboard --yes --bind loopback --no-install-service
 
 Test „Run test“: Connection successful (25.09.2026).
 
+## Agent „Umsetzer“ (Qwen lokal) – über den Process-Adapter
+
+Beim Adapter „Claude Code“ lehnt Paperclip `ANTHROPIC_BASE_URL` neben einer Abo-/API-Verbindung ab
+(„The configured provider routing is incompatible with this AI connection“). AI-Verbindungen kennen nur
+Cloud-Anbieter; lokale Anbieter kommen erst mit [PR #14006](https://github.com/paperclipai/paperclip/pull/14006).
+
+Lösung: Adapter **Process** mit `scripts/local-llm/paperclip-local-claude.sh` als Command. Das Skript
+entfernt den Abo-Token, setzt alle `ANTHROPIC_*`-Variablen auf LM Studio, nutzt die leere Konfiguration
+`~/.claude-local` und bricht mit Exit 2 ab, wenn das lokale Modell nicht geladen ist (kein Cloud-Fallback).
+
+```bash
+# als Admin
+sudo mkdir -p /Users/agents/bin
+sudo install -o agents -m 755 ~/my-claude-setup/scripts/local-llm/paperclip-local-claude.sh /Users/agents/bin/local-claude.sh
+```
+
 ## Offen
 
 - Drei Agenten: Planer (claude_local, Abo), Umsetzer (claude_local mit `ANTHROPIC_BASE_URL=http://localhost:1234`),
