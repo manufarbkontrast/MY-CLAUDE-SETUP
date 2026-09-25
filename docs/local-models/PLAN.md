@@ -156,7 +156,7 @@ Modus B geht auch ohne Pipeline: `scripts/local-llm/critic.sh <plan> main` gegen
 
 ### Bekannte Stolpersteine
 
-- **Langer System-Prompt:** Claude Code schickt ~20K+ Token Kontext. Bei ~1.000–2.000 t/s Prompt-Verarbeitung
+- **Langer System-Prompt:** Claude Code schickt ~20K+ Token Kontext. Gemessen: 3.654 t/s Prompt-Verarbeitung (Qwen3.6-35B-A3B, siehe `benchmarks.md`), also ~6 s. Bei größeren Modellen mit ~1.000–2.000 t/s
   sind das 10–20 s pro erster Runde. Prompt-Caching in LM Studio/Ollama aktiv lassen, Kontext ≥ 64K setzen.
 - **Tool-Calling:** Nicht jede Quantisierung hält das Tool-Format sauber. Mit 8-bit starten, erst bei Bedarf runter.
 - **Thinking-Modus:** Qwen3.6/3.8 denken standardmäßig. Für den Executor gut; für schnelle Helfer `enable_thinking: false`.
@@ -172,7 +172,7 @@ Modus B geht auch ohne Pipeline: `scripts/local-llm/critic.sh <plan> main` gegen
 ### Woche 1 – Basis
 - [ ] LM Studio + Ollama installieren, Modellordner auf die SSD legen
 - [ ] Qwen3.6-35B-A3B, Qwen3.8-27B, gpt-oss-120B, Qwen3.5-9B laden
-- [ ] Wired-Limit anheben, Token/s mit `mlx_lm.generate` selbst messen und in `docs/local-models/benchmarks.md` festhalten
+- [x] Wired-Limit anheben, Token/s mit `mlx_lm.generate` selbst messen und in `docs/local-models/benchmarks.md` festhalten (Qwen3.6-35B-A3B 8-bit: 3.654 t/s Prompt, 93 t/s Generierung)
 - [ ] Claude Code einmal manuell gegen lokal testen:
       `ANTHROPIC_BASE_URL=http://localhost:1234 ANTHROPIC_AUTH_TOKEN=lmstudio claude --model qwen3.6-35b-a3b`
 
