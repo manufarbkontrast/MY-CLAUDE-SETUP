@@ -55,6 +55,11 @@ export CLAUDE_CONFIG_DIR="${CLAUDE_CONFIG_DIR:-$LOCAL_CLAUDE_CONFIG_DIR}"
 mkdir -p "$CLAUDE_CONFIG_DIR"
 [[ -f "$CLAUDE_CONFIG_DIR/settings.json" ]] || echo '{"env":{"ENABLE_CLAUDEAI_MCP_SERVERS":"false"}}' > "$CLAUDE_CONFIG_DIR/settings.json"
 
+# Protokoll: jeder Aufruf mit Argumenten und Entscheidung (Nachweis, dass Paperclip hier durchlaeuft)
+LOG="${LOCAL_WRAPPER_LOG:-$HOME/.claude-local/wrapper.log}"
+log() { printf '%s pid=%s %s\n' "$(date '+%F %T')" "$$" "$*" >> "$LOG" 2>/dev/null || true; }
+log "START args=[$*] model=$LOCAL_MODEL base=$LOCAL_BASE_URL"
+
 # Versionsabfragen ohne Vorabpruefung durchreichen
 case "${1:-}" in --version|-v) exec "$LOCAL_CLAUDE_BIN" "$@" ;; esac
 
@@ -63,10 +68,12 @@ case "${1:-}" in --version|-v) exec "$LOCAL_CLAUDE_BIN" "$@" ;; esac
 loaded_state="$(curl -sf --max-time 5 "$LOCAL_BASE_URL/api/v0/models" 2>/dev/null \
   | jq -r --arg m "$LOCAL_MODEL" '.data[]? | select(.id == $m) | .state' 2>/dev/null || true)"
 if [[ "$loaded_state" != "loaded" ]]; then
+  log "ABBRUCH modell-zustand=${loaded_state:-unbekannt}"
   echo "FEHLER: Modell '$LOCAL_MODEL' unter $LOCAL_BASE_URL nicht geladen (Zustand: ${loaded_state:-unbekannt}). lms load ausfuehren." >&2
   exit 2
 fi
 
+log "OK modell geladen -> starte Claude Code gegen $LOCAL_BASE_URL"
 if [[ $# -eq 0 ]]; then
   # Handbetrieb: Prompt per stdin
   exec "$LOCAL_CLAUDE_BIN" -p \
