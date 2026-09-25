@@ -39,9 +39,23 @@ paperclipai onboard --yes --bind loopback --no-install-service
 | `launchctl kickstart … gui/502` schlägt fehl | aus `sudo -u agents`-Sitzung nicht erlaubt | Dienst als Admin mit `sudo launchctl bootout/bootstrap gui/502 …` steuern |
 | `Bootstrap failed: 5: Input/output error` | alter Prozess fährt noch herunter oder Dienst ist schon geladen | warten; `launchctl print` prüfen – läuft er, ist alles gut |
 
+## Agent „Klaus“ (Planer, Claude-Abo) – geprüfte Einstellungen
+
+| Bereich | Einstellung | Wert |
+|---|---|---|
+| Harness / Runtime | Execution engine | **Claude CLI** (nicht ACP – nur CLI nutzt `~/.claude/settings.json` mit Deny-Liste) |
+| | Advanced → Command | `/Users/agents/.local/bin/claude` (Extra args leer lassen!) |
+| | Max turns per run | 60 (Standard war 1000) |
+| | Skip permissions | an – ohne hängt der headless Lauf; Schutz kommt von OS-Benutzer, Deny-Liste, Limits |
+| | Enable Chrome / Heartbeat | aus / aus |
+| | Env | `PATH`, `CLAUDE_CODE_EXECUTABLE` (Workaround #12215) |
+| Permissions / Trust | Can create new agents / create-import skills | aus (Agenten legt der Mensch an; keine fremden Skills) |
+| Tools | GitHub identity | **nicht** „Connect my GitHub“; später eigenes Konto mit Zugriff auf ein Repo |
+
+Test „Run test“: Connection successful (25.09.2026).
+
 ## Offen
 
-- Engine im Claude-Formular auf **CLI** statt ACP (nur dann greifen `~/.claude/settings.json`-Regeln sicher)
 - Drei Agenten: Planer (claude_local, Abo), Umsetzer (claude_local mit `ANTHROPIC_BASE_URL=http://localhost:1234`),
   Kritiker (process-Adapter → `critic.sh`)
 - `dangerouslySkipPermissions` bewusst setzen, Freigaben (Approvals) aktivieren
