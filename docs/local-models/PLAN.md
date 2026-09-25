@@ -173,7 +173,7 @@ Modus B geht auch ohne Pipeline: `scripts/local-llm/critic.sh <plan> main` gegen
 - [ ] LM Studio + Ollama installieren, Modellordner auf die SSD legen
 - [ ] Qwen3.6-35B-A3B, Qwen3.8-27B, gpt-oss-120B, Qwen3.5-9B laden
 - [x] Wired-Limit anheben, Token/s mit `mlx_lm.generate` selbst messen und in `docs/local-models/benchmarks.md` festhalten (Qwen3.6-35B-A3B 8-bit: 3.654 t/s Prompt, 93 t/s Generierung)
-- [ ] Claude Code einmal manuell gegen lokal testen:
+- [x] Claude Code einmal manuell gegen lokal testen (25.09.: `claude-local -p` legte Funktion + 6 Tests an, alle grün; `CLAUDE_CODE_MAX_CONTEXT_TOKENS` nötig, da Claude Code lokale Modelle nicht kennt):
       `ANTHROPIC_BASE_URL=http://localhost:1234 ANTHROPIC_AUTH_TOKEN=lmstudio claude --model qwen3.6-35b-a3b`
 
 ### Woche 2 – Harness
