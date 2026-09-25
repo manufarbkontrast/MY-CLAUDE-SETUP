@@ -75,7 +75,11 @@ sudo install -o agents -m 755 ~/my-claude-setup/scripts/local-llm/paperclip-loca
 # Name "claude" ist Pflicht: sonst überspringt Paperclip den Hello-Test und verweigert die Übernahme.
 # In Paperclip: Command = /Users/agents/bin/claude, Max turns 40 (wird beim Adapterwechsel auf 1000 zurückgesetzt!)
 # Handtest als agents: echo "Antworte nur mit OK." | ~/bin/claude   (25.09.: OK in 6 s)
-# Paperclip „Run test“ mit Command /Users/agents/bin/claude: Connection successful, Anfrage erscheint in LM Studio (25.09.)
+# ACHTUNG: Paperclips „Run test“ ruft den eingetragenen Command NICHT auf (kein Eintrag in wrapper.log,
+#   grün auch bei entladenem Modell). Er prüft nur das Abo. Aussagekräftig ist nur ein echter Lauf.
+# Nachweis 25.09.: echter Auftrag bei entladenem Qwen -> Lauf scheitert mit Exit 2
+#   „Modell 'qwen3.6-35b-a3b' … nicht geladen“ -> echte Läufe gehen durch das Skript, kein Cloud-Fallback.
+# Protokoll jedes Aufrufs: /Users/agents/.claude-local/wrapper.log
 ```
 
 ## Offen
