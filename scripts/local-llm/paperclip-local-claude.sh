@@ -1,9 +1,15 @@
 #!/usr/bin/env bash
-# Paperclip "Process"-Adapter -> Claude Code gegen ein LOKALES Modell (LM Studio).
-# Paperclip erlaubt beim claude_local-Adapter kein ANTHROPIC_BASE_URL neben einer Abo-/API-Verbindung
-# ("provider routing is incompatible"; lokale Provider erst mit PR paperclipai/paperclip#14006).
-# Dieses Skript wird deshalb als Process-Command eingetragen. Paperclip streamt den Prompt per stdin,
-# die Antwort geht ueber stdout zurueck.
+# Claude Code gegen ein LOKALES Modell (LM Studio) – als Ersatz fuer `claude` in Paperclip.
+# Paperclip erlaubt beim Claude-Code-Adapter kein ANTHROPIC_BASE_URL neben einer Abo-/API-Verbindung
+# ("provider routing is incompatible"; lokale Provider erst mit PR paperclipai/paperclip#14006),
+# und der Process-Adapter ist in der Oberflaeche noch "Coming soon".
+# Deshalb: Claude-Code-Adapter behalten, aber als "Command" dieses Skript eintragen. Es setzt die
+# lokalen Variablen erst im Prozess, die Paperclip-Pruefung sieht sie nicht.
+#
+# Zwei Betriebsarten:
+#  - Adapter-Modus (Argumente von Paperclip): Argumente durchreichen, aber --model durch das lokale
+#    Modell ersetzen und --dangerously-skip-permissions durch acceptEdits + Allowlist ersetzen.
+#  - Handbetrieb (keine Argumente): Prompt per stdin, eigene Flags.
 #
 # Sicherheitsregeln:
 #  - Kein Fallback in die Cloud: Ist LM Studio/das Modell nicht erreichbar, bricht das Skript mit Exit 2 ab.
@@ -35,9 +41,13 @@ export ANTHROPIC_DEFAULT_OPUS_MODEL="$LOCAL_MODEL"
 export CLAUDE_CODE_MAX_CONTEXT_TOKENS="$LOCAL_CONTEXT"
 export CLAUDE_CODE_MAX_OUTPUT_TOKENS="$LOCAL_MAX_OUTPUT"
 export CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC=1
-export CLAUDE_CONFIG_DIR="$LOCAL_CLAUDE_CONFIG_DIR"
+# Von Paperclip gesetztes Config-Verzeichnis respektieren (Skills), sonst eigenes leeres
+export CLAUDE_CONFIG_DIR="${CLAUDE_CONFIG_DIR:-$LOCAL_CLAUDE_CONFIG_DIR}"
 mkdir -p "$CLAUDE_CONFIG_DIR"
 [[ -f "$CLAUDE_CONFIG_DIR/settings.json" ]] || echo '{"env":{"ENABLE_CLAUDEAI_MCP_SERVERS":"false"}}' > "$CLAUDE_CONFIG_DIR/settings.json"
+
+# Versionsabfragen ohne Vorabpruefung durchreichen
+case "${1:-}" in --version|-v) exec claude "$@" ;; esac
 
 # Vorabpruefung: lokales Modell muss geladen sein, sonst Abbruch statt Cloud-Fallback
 if ! curl -sf --max-time 5 "$LOCAL_BASE_URL/v1/models" | grep -q "\"$LOCAL_MODEL\""; then
@@ -45,10 +55,31 @@ if ! curl -sf --max-time 5 "$LOCAL_BASE_URL/v1/models" | grep -q "\"$LOCAL_MODEL
   exit 2
 fi
 
-# Prompt kommt per stdin von Paperclip
-exec claude -p \
+if [[ $# -eq 0 ]]; then
+  # Handbetrieb: Prompt per stdin
+  exec claude -p \
+    --permission-mode acceptEdits \
+    --strict-mcp-config \
+    --max-turns "$LOCAL_MAX_TURNS" \
+    --allowedTools "$LOCAL_ALLOWED_TOOLS"
+fi
+
+# Adapter-Modus: Argumente von Paperclip umschreiben
+ARGS=()
+REPLACE_NEXT=""
+for a in "$@"; do
+  if [[ "$REPLACE_NEXT" == "model" ]]; then ARGS+=("$LOCAL_MODEL"); REPLACE_NEXT=""; continue; fi
+  if [[ "$REPLACE_NEXT" == "drop" ]]; then REPLACE_NEXT=""; continue; fi
+  case "$a" in
+    --model) ARGS+=("--model"); REPLACE_NEXT="model" ;;
+    --model=*) ARGS+=("--model=$LOCAL_MODEL") ;;
+    --dangerously-skip-permissions|--allow-dangerously-skip-permissions) ;;
+    --permission-mode) REPLACE_NEXT="drop" ;;
+    --permission-mode=*) ;;
+    *) ARGS+=("$a") ;;
+  esac
+done
+
+exec claude "${ARGS[@]}" \
   --permission-mode acceptEdits \
-  --strict-mcp-config \
-  --max-turns "$LOCAL_MAX_TURNS" \
-  --allowedTools "$LOCAL_ALLOWED_TOOLS" \
-  "$@"
+  --allowedTools "$LOCAL_ALLOWED_TOOLS"
