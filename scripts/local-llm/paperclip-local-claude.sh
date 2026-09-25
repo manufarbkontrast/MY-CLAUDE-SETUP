@@ -57,6 +57,7 @@ mkdir -p "$CLAUDE_CONFIG_DIR"
 
 # Protokoll: jeder Aufruf mit Argumenten und Entscheidung (Nachweis, dass Paperclip hier durchlaeuft)
 LOG="${LOCAL_WRAPPER_LOG:-$HOME/.claude-local/wrapper.log}"
+mkdir -p "$(dirname "$LOG")" 2>/dev/null || true
 log() { printf '%s pid=%s %s\n' "$(date '+%F %T')" "$$" "$*" >> "$LOG" 2>/dev/null || true; }
 log "START args=[$*] model=$LOCAL_MODEL base=$LOCAL_BASE_URL"
 
