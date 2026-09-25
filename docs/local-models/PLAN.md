@@ -158,9 +158,10 @@ Modus B geht auch ohne Pipeline: `scripts/local-llm/critic.sh <plan> main` gegen
 
 - **Langer System-Prompt:** Claude Code schickt ~20K+ Token Kontext. Gemessen: 3.654 t/s Prompt-Verarbeitung (Qwen3.6-35B-A3B, siehe `benchmarks.md`), also ~6 s. Bei größeren Modellen mit ~1.000–2.000 t/s
   sind das 10–20 s pro erster Runde. Prompt-Caching in LM Studio/Ollama aktiv lassen, Kontext ≥ 64K setzen.
-- **Kontext durch das eigene Setup:** `~/.claude` mit 466 Skills, 182 Agents, Plugins und MCP-Servern belegt einen Großteil
-  eines 64K-Fensters („Autocompact is thrashing“). Der Executor läuft deshalb mit eigener, leerer Konfiguration
-  (`CLAUDE_CONFIG_DIR=~/.claude-local`, `--strict-mcp-config`).
+- **Kontextfenster für Claude Code:** Claude Code kennt lokale Modelle nicht und muss die Fenstergröße gesagt bekommen
+  (`CLAUDE_CODE_MAX_CONTEXT_TOKENS`). Von diesem Fenster zieht es die maximale Antwortlänge ab. Mit 64K und
+  Standard-Antwortlänge blieb zu wenig Platz („Autocompact is thrashing“). Executor daher mit 128K Fenster,
+  16K Antwortlänge und eigener, leerer Konfiguration (`CLAUDE_CONFIG_DIR=~/.claude-local`, `--strict-mcp-config`).
 - **Tool-Calling:** Nicht jede Quantisierung hält das Tool-Format sauber. Mit 8-bit starten, erst bei Bedarf runter.
 - **Thinking-Modus:** Qwen3.6/3.8 denken standardmäßig. Für den Executor gut; für schnelle Helfer `enable_thinking: false`.
 - **Sampling:** Qwen3.8 Thinking: `temperature 1.0, top_p 0.95, top_k 20`. Instruct: `temperature 0.7, top_p 0.8, presence_penalty 1.5`.
