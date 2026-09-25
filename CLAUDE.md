@@ -106,6 +106,7 @@ Plan, Modellauswahl und Fahrplan: `docs/local-models/PLAN.md`.
 - `scripts/local-llm/accept.sh <slug>` — Ergebnis nach Review übernehmen (Commit + Fast-Forward + Aufräumen), `--discard` verwirft
 - `scripts/local-llm/critic-server.sh` — startet den Kritiker (gpt-oss-120b) über `mlx_lm.server` auf Port 8080
 - Modellrollen und Endpoints: `scripts/local-llm/models.conf`
+- Paperclip (Kontroll-Ebene, Benutzer `agents`): `docs/local-models/PAPERCLIP.md`, PATH-Reparatur nach Dienst-Neustart: `scripts/local-llm/paperclip-fix-path.sh`
 
 ## Rules
 
