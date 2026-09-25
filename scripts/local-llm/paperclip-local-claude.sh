@@ -20,19 +20,28 @@
 # In Paperclip: Command = /Users/agents/bin/claude
 set -euo pipefail
 
+# Basis = Elternordner von bin/ (z. B. /Users/agents), unabhaengig von $HOME
+SELF="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/$(basename "${BASH_SOURCE[0]}")"
+BASE_HOME="${LOCAL_BASE_HOME:-$(cd "$(dirname "$SELF")/.." && pwd)}"
+
 : "${LOCAL_BASE_URL:=http://localhost:1234}"
 : "${LOCAL_MODEL:=qwen3.6-35b-a3b}"
 : "${LOCAL_CONTEXT:=131072}"
 : "${LOCAL_MAX_OUTPUT:=16384}"
 : "${LOCAL_MAX_TURNS:=40}"
-: "${LOCAL_CLAUDE_CONFIG_DIR:=$HOME/.claude-local}"
-: "${LOCAL_CLAUDE_BIN:=$HOME/.local/bin/claude}"
+: "${LOCAL_CLAUDE_CONFIG_DIR:=$BASE_HOME/.claude-local}"
+: "${LOCAL_CLAUDE_BIN:=$BASE_HOME/.local/bin/claude}"
 : "${LOCAL_ALLOWED_TOOLS:=Read,Edit,Write,Glob,Grep,Bash(ls:*),Bash(git diff:*),Bash(git status:*),Bash(npm test:*),Bash(npm run:*),Bash(node --test:*),Bash(pytest:*)}"
 
-export PATH="$HOME/.local/bin:/opt/homebrew/opt/node@24/bin:/opt/homebrew/bin:/usr/bin:/bin:/usr/sbin:/sbin"
+# Protokoll: jeder Aufruf mit Argumenten und Entscheidung (Nachweis, dass Paperclip hier durchlaeuft)
+LOG="${LOCAL_WRAPPER_LOG:-$BASE_HOME/.claude-local/wrapper.log}"
+mkdir -p "$(dirname "$LOG")" 2>/dev/null || true
+log() { printf '%s pid=%s %s\n' "$(date '+%F %T')" "$$" "$*" >> "$LOG" 2>/dev/null || true; }
+log "START args=[$*] model=$LOCAL_MODEL base=$LOCAL_BASE_URL HOME=$HOME CLAUDE_CONFIG_DIR=${CLAUDE_CONFIG_DIR:-}"
+
+export PATH="$BASE_HOME/.local/bin:/opt/homebrew/opt/node@24/bin:/opt/homebrew/bin:/usr/bin:/bin:/usr/sbin:/sbin"
 
 # Echtes Claude Code absolut aufrufen – nie dieses Skript selbst (es heisst ggf. auch "claude")
-SELF="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/$(basename "${BASH_SOURCE[0]}")"
 if [[ ! -x "$LOCAL_CLAUDE_BIN" || "$(cd "$(dirname "$LOCAL_CLAUDE_BIN")" && pwd)/$(basename "$LOCAL_CLAUDE_BIN")" == "$SELF" ]]; then
   echo "FEHLER: echtes Claude Code nicht gefunden unter $LOCAL_CLAUDE_BIN" >&2
   exit 2
@@ -54,12 +63,6 @@ export CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC=1
 export CLAUDE_CONFIG_DIR="${CLAUDE_CONFIG_DIR:-$LOCAL_CLAUDE_CONFIG_DIR}"
 mkdir -p "$CLAUDE_CONFIG_DIR"
 [[ -f "$CLAUDE_CONFIG_DIR/settings.json" ]] || echo '{"env":{"ENABLE_CLAUDEAI_MCP_SERVERS":"false"}}' > "$CLAUDE_CONFIG_DIR/settings.json"
-
-# Protokoll: jeder Aufruf mit Argumenten und Entscheidung (Nachweis, dass Paperclip hier durchlaeuft)
-LOG="${LOCAL_WRAPPER_LOG:-$HOME/.claude-local/wrapper.log}"
-mkdir -p "$(dirname "$LOG")" 2>/dev/null || true
-log() { printf '%s pid=%s %s\n' "$(date '+%F %T')" "$$" "$*" >> "$LOG" 2>/dev/null || true; }
-log "START args=[$*] model=$LOCAL_MODEL base=$LOCAL_BASE_URL"
 
 # Versionsabfragen ohne Vorabpruefung durchreichen
 case "${1:-}" in --version|-v) exec "$LOCAL_CLAUDE_BIN" "$@" ;; esac
