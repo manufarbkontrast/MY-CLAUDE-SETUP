@@ -75,6 +75,7 @@ sudo install -o agents -m 755 ~/my-claude-setup/scripts/local-llm/paperclip-loca
 # Name "claude" ist Pflicht: sonst überspringt Paperclip den Hello-Test und verweigert die Übernahme.
 # In Paperclip: Command = /Users/agents/bin/claude, Max turns 40 (wird beim Adapterwechsel auf 1000 zurückgesetzt!)
 # Handtest als agents: echo "Antworte nur mit OK." | ~/bin/claude   (25.09.: OK in 6 s)
+# Paperclip „Run test“ mit Command /Users/agents/bin/claude: Connection successful, Anfrage erscheint in LM Studio (25.09.)
 ```
 
 ## Offen
