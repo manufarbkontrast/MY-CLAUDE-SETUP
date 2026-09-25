@@ -58,9 +58,12 @@ mkdir -p "$CLAUDE_CONFIG_DIR"
 # Versionsabfragen ohne Vorabpruefung durchreichen
 case "${1:-}" in --version|-v) exec "$LOCAL_CLAUDE_BIN" "$@" ;; esac
 
-# Vorabpruefung: lokales Modell muss geladen sein, sonst Abbruch statt Cloud-Fallback
-if ! curl -sf --max-time 5 "$LOCAL_BASE_URL/v1/models" | grep -q "\"$LOCAL_MODEL\""; then
-  echo "FEHLER: Modell '$LOCAL_MODEL' unter $LOCAL_BASE_URL nicht erreichbar (lms ps / lms load pruefen)." >&2
+# Vorabpruefung: das lokale Modell muss GELADEN sein (nicht nur heruntergeladen), sonst Abbruch.
+# LM Studio listet unter /v1/models auch nur heruntergeladene Modelle; /api/v0/models nennt den Zustand.
+loaded_state="$(curl -sf --max-time 5 "$LOCAL_BASE_URL/api/v0/models" 2>/dev/null \
+  | jq -r --arg m "$LOCAL_MODEL" '.data[]? | select(.id == $m) | .state' 2>/dev/null || true)"
+if [[ "$loaded_state" != "loaded" ]]; then
+  echo "FEHLER: Modell '$LOCAL_MODEL' unter $LOCAL_BASE_URL nicht geladen (Zustand: ${loaded_state:-unbekannt}). lms load ausfuehren." >&2
   exit 2
 fi
 
