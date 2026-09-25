@@ -33,8 +33,8 @@ $DIFF
 ## Testausgabe
 $TESTS"
 
-REQUEST="$(jq -n --arg m "$CRITIC_MODEL" --arg s "$SYSTEM" --arg u "$USER" \
-  '{model:$m, temperature:0.2, messages:[{role:"system",content:$s},{role:"user",content:$u}]}')"
+REQUEST="$(jq -n --arg m "$CRITIC_MODEL" --arg s "$SYSTEM" --arg u "$USER" --argjson t "$CRITIC_MAX_TOKENS" \
+  '{model:$m, temperature:0.2, max_tokens:$t, messages:[{role:"system",content:$s},{role:"user",content:$u}]}')"
 
 RESPONSE="$(curl -sS "$CRITIC_BASE_URL/chat/completions" \
   -H "Content-Type: application/json" \
@@ -42,8 +42,17 @@ RESPONSE="$(curl -sS "$CRITIC_BASE_URL/chat/completions" \
   -d "$REQUEST")"
 
 CONTENT="$(jq -r '.choices[0].message.content // empty' <<<"$RESPONSE")"
-# JSON-Block aus der Antwort ziehen (Modelle packen es gern in ```json ... ```)
-JSON="$(sed -n '/{/,$p' <<<"$CONTENT" | sed '/^```/d')"
+# Denkteil entfernen: gpt-oss (Harmony-Format, roh von mlx_lm.server) und <think>-Bloecke (Qwen u. a.)
+CONTENT="${CONTENT##*'<|channel|>final<|message|>'}"
+CONTENT="${CONTENT##*'</think>'}"
+CONTENT="${CONTENT%%'<|return|>'*}"
+CONTENT="${CONTENT%%'<|end|>'*}"
+# JSON-Objekt herausschneiden: vom ersten { bis zur letzten }
+JSON=""
+if [[ "$CONTENT" == *"{"*"}"* ]]; then
+  JSON="{${CONTENT#*\{}"
+  JSON="${JSON%\}*}}"
+fi
 if jq -e '.verdict' >/dev/null 2>&1 <<<"$JSON"; then
   jq . <<<"$JSON"
 else

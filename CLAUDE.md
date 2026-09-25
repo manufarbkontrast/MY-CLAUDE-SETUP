@@ -103,6 +103,7 @@ Plan, Modellauswahl und Fahrplan: `docs/local-models/PLAN.md`.
 - `/local-delegate <Aufgabe>` — Claude schreibt einen Plan nach `.plans/`, ein lokales Modell setzt ihn im Git-Worktree um, ein zweites lokales Modell prüft
 - `scripts/local-llm/pipeline.sh <plan.md>` — Executor → Tests → Kritiker, bis PASS oder `MAX_ROUNDS`
 - `scripts/local-llm/critic.sh <plan.md> main` — nur lokale Zweitmeinung zu einem Diff
+- `scripts/local-llm/critic-server.sh` — startet den Kritiker (gpt-oss-120b) über `mlx_lm.server` auf Port 8080
 - Modellrollen und Endpoints: `scripts/local-llm/models.conf`
 
 ## Rules

@@ -162,6 +162,9 @@ Modus B geht auch ohne Pipeline: `scripts/local-llm/critic.sh <plan> main` gegen
   (`CLAUDE_CODE_MAX_CONTEXT_TOKENS`). Von diesem Fenster zieht es die maximale Antwortlänge ab. Mit 64K und
   Standard-Antwortlänge blieb zu wenig Platz („Autocompact is thrashing“). Executor daher mit 128K Fenster,
   16K Antwortlänge und eigener, leerer Konfiguration (`CLAUDE_CONFIG_DIR=~/.claude-local`, `--strict-mcp-config`).
+- **Zwei große Modelle in LM Studio:** LM Studios Lade-Schutz lehnt Qwen (37 GB) + gpt-oss-120b (67 GB) gemeinsam ab,
+  obwohl 64 % Speicher frei sind. Der Kritiker läuft deshalb über `mlx_lm.server` (`scripts/local-llm/critic-server.sh`).
+  gpt-oss liefert dort das rohe Harmony-Format (`<|channel|>analysis…final…`); `critic.sh` schneidet den Denkteil ab.
 - **Tool-Calling:** Nicht jede Quantisierung hält das Tool-Format sauber. Mit 8-bit starten, erst bei Bedarf runter.
 - **Thinking-Modus:** Qwen3.6/3.8 denken standardmäßig. Für den Executor gut; für schnelle Helfer `enable_thinking: false`.
 - **Sampling:** Qwen3.8 Thinking: `temperature 1.0, top_p 0.95, top_k 20`. Instruct: `temperature 0.7, top_p 0.8, presence_penalty 1.5`.
