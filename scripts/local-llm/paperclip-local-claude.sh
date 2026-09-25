@@ -32,6 +32,9 @@ BASE_HOME="${LOCAL_BASE_HOME:-$(cd "$(dirname "$SELF")/.." && pwd)}"
 : "${LOCAL_CLAUDE_CONFIG_DIR:=$BASE_HOME/.claude-local}"
 : "${LOCAL_CLAUDE_BIN:=$BASE_HOME/.local/bin/claude}"
 : "${LOCAL_ALLOWED_TOOLS:=Read,Edit,Write,Glob,Grep,Bash(ls:*),Bash(git diff:*),Bash(git status:*),Bash(npm test:*),Bash(npm run:*),Bash(node --test:*),Bash(pytest:*)}"
+# Paperclips eigener MCP-Server fuer Aufgaben/Kommentare/Status ("Paperclip projects" -> mcp__Paperclip_projects).
+# Bewusst NICHT "Paperclip connections": darueber liefen in Paperclip verbundene Apps.
+: "${LOCAL_ALLOWED_MCP:=mcp__Paperclip_projects}"
 
 # Protokoll: jeder Aufruf mit Argumenten und Entscheidung (Nachweis, dass Paperclip hier durchlaeuft)
 LOG="${LOCAL_WRAPPER_LOG:-$BASE_HOME/.claude-local/wrapper.log}"
@@ -105,4 +108,4 @@ done
 
 exec "$LOCAL_CLAUDE_BIN" "${ARGS[@]}" \
   --permission-mode acceptEdits \
-  --allowedTools "$LOCAL_ALLOWED_TOOLS"
+  --allowedTools "$LOCAL_ALLOWED_TOOLS${LOCAL_ALLOWED_MCP:+,$LOCAL_ALLOWED_MCP}"

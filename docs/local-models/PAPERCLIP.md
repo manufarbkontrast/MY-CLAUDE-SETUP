@@ -98,6 +98,9 @@ Folgen:
   von `agents` (Deny-Liste, Connectoren aus) wird von Paperclip-Läufen **nicht** gelesen.
 - Paperclip spricht mit dem Agenten über einen eigenen **MCP-Server** (`--mcp-config`), nicht über curl.
   Mit `acceptEdits` + Allowlist müssen dessen Tools ausdrücklich erlaubt werden.
+- MCP-Server im Lauf: „Paperclip projects“ (`http://127.0.0.1:3100/api/mcp/project-tools`, Aufgaben/Status)
+  und „Paperclip connections“ (`/mcp/runtime-tools`, in Paperclip verbundene Apps). Der Umsetzer darf nur
+  `mcp__Paperclip_projects` (`LOCAL_ALLOWED_MCP`).
 ```
 
 ## Offen
