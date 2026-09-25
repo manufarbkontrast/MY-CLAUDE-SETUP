@@ -82,6 +82,24 @@ sudo install -o agents -m 755 ~/my-claude-setup/scripts/local-llm/paperclip-loca
 # Protokoll jedes Aufrufs: /Users/agents/.claude-local/wrapper.log
 ```
 
+So ruft Paperclip (2026.916.1) den Claude-Code-Adapter auf (aus wrapper.log):
+
+```
+--print --output-format stream-json --verbose --setting-sources user
+--dangerously-skip-permissions --model claude-opus-5 --effort medium --max-turns 40
+--append-system-prompt-file …/claude-prompt-cache/<hash>/agent-instructions.md
+--mcp-config …/agents/<agent>/claude-runtime/runs/<run>/mcp/mcp-config.json --strict-mcp-config
+--add-dir …/claude-prompt-cache/<hash>
+HOME=/var/folders/…/T/paperclip-ai-…   CLAUDE_CONFIG_DIR=$HOME/provider   (pro Lauf frisch)
+```
+
+Folgen:
+- Paperclip gibt jedem Lauf ein **eigenes temporäres `HOME` und `CLAUDE_CONFIG_DIR`**. `~/.claude/settings.json`
+  von `agents` (Deny-Liste, Connectoren aus) wird von Paperclip-Läufen **nicht** gelesen.
+- Paperclip spricht mit dem Agenten über einen eigenen **MCP-Server** (`--mcp-config`), nicht über curl.
+  Mit `acceptEdits` + Allowlist müssen dessen Tools ausdrücklich erlaubt werden.
+```
+
 ## Offen
 
 - Drei Agenten: Planer (claude_local, Abo), Umsetzer (claude_local mit `ANTHROPIC_BASE_URL=http://localhost:1234`),
