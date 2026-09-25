@@ -39,3 +39,9 @@ Erkenntnisse:
 - Kontextfenster für Claude Code mindestens 128K angeben und Antwortlänge begrenzen, sonst Autocompact-Schleifen.
 - Der Code des lokalen Modells war in allen Läufen korrekt; selbst ausgedachte Test-Erwartungen nicht immer
   → Kern-Tests gibt der Plan wörtlich vor (`/local-delegate`), der Kritiker prüft Test vs. Code.
+
+## Pipeline-Läufe (Executor → Tests → Kritiker)
+
+| Datum | Plan | Runden | Urteil | Gesamt | Bemerkung |
+|---|---|---|---|---|---|
+| 2026-09-25 | filter-v3 (mit vorgegebenen Tests) | 1 | PASS | 12:36 | Qwen (LM Studio) + gpt-oss-120b (mlx_lm.server) gleichzeitig geladen; Aufteilung der Zeit noch nicht gemessen |

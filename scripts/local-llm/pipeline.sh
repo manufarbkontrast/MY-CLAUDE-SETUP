@@ -14,23 +14,38 @@ TEST_CMD="$(sed -n 's/^test_command:[[:space:]]*//p' "$PLAN" | head -1)"
 LOG_DIR="$(git rev-parse --show-toplevel)/.plans/logs/$SLUG"
 mkdir -p "$LOG_DIR"
 FEEDBACK=""
+TIMINGS="$LOG_DIR/timings.txt"
+
+# Dauer eines Schritts protokollieren (Sekunden + freier Speicher laut macOS)
+log_time() {
+  local label="$1" start="$2"
+  local free="?"
+  command -v memory_pressure >/dev/null && free="$(memory_pressure 2>/dev/null | sed -n 's/.*percentage: //p')"
+  echo "$label: $((SECONDS - start))s, Speicher frei: $free" | tee -a "$TIMINGS" >&2
+}
 
 for ROUND in $(seq 1 "$MAX_ROUNDS"); do
   echo "== Runde $ROUND/$MAX_ROUNDS: Executor ($EXECUTOR_MODEL)" >&2
+  T0=$SECONDS
   WORKTREE="$("$SCRIPT_DIR/execute.sh" "$PLAN" "$FEEDBACK" | tail -1)"
+  log_time "Runde $ROUND Executor" "$T0"
 
   TEST_LOG="$LOG_DIR/round-$ROUND-tests.log"
   TEST_STATUS=0
   if [[ -n "$TEST_CMD" ]]; then
     echo "== Tests: $TEST_CMD" >&2
+    T0=$SECONDS
     (cd "$WORKTREE" && bash -c "$TEST_CMD") >"$TEST_LOG" 2>&1 || TEST_STATUS=$?
+    log_time "Runde $ROUND Tests" "$T0"
   fi
 
   # Neue Dateien sichtbar machen, damit sie im Diff des Kritikers auftauchen
   git -C "$WORKTREE" add -N -- . >/dev/null 2>&1 || true
   echo "== Kritiker ($CRITIC_MODEL)" >&2
   REVIEW="$LOG_DIR/round-$ROUND-review.json"
+  T0=$SECONDS
   "$SCRIPT_DIR/critic.sh" "$PLAN" "$BASE" "$TEST_LOG" "$WORKTREE" >"$REVIEW"
+  log_time "Runde $ROUND Kritiker" "$T0"
   VERDICT="$(jq -r .verdict "$REVIEW")"
 
   if [[ "$TEST_STATUS" -eq 0 && "$VERDICT" == "PASS" ]]; then
