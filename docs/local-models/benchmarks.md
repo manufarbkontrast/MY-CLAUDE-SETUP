@@ -44,4 +44,8 @@ Erkenntnisse:
 
 | Datum | Plan | Runden | Urteil | Gesamt | Bemerkung |
 |---|---|---|---|---|---|
-| 2026-09-25 | filter-v3 (mit vorgegebenen Tests) | 1 | PASS | 12:36 | Qwen (LM Studio) + gpt-oss-120b (mlx_lm.server) gleichzeitig geladen; Aufteilung der Zeit noch nicht gemessen |
+| 2026-09-25 | filter-v3 (mit vorgegebenen Tests) | 1 | PASS | 12:36 | Qwen (LM Studio) + gpt-oss-120b (mlx_lm.server) gleichzeitig geladen; Aufteilung nicht gemessen, danach 9,2 GB Swap |
+| 2026-09-25 | filter-v3b (gleicher Plan, Code schon vorhanden) | 1 | PASS | ~3:25 | Executor 131 s (28 % frei), Kritiker 72 s (19 % frei), Swap 9,2 → 10,6 GB |
+
+Vergleich Einzelbetrieb vs. beide Modelle geladen: Executor 62 s → 131 s, Kritiker 28 s → 72 s.
+Beide großen Modelle gleichzeitig (37 + 67 GB) drücken den freien Speicher unter 20 % und lösen Swap aus.
