@@ -100,6 +100,7 @@ claude mcp add gsc-mcp --env GSC_SERVICE_ACCOUNT_KEY_PATH=/pfad/zu/service-accou
 
 Plan, Modellauswahl und Fahrplan: `docs/local-models/PLAN.md`.
 
+- `qwen` / `gemma` / `local-model <lms-id>` — Claude Code interaktiv mit lokalem Modell (lädt es bei Bedarf in LM Studio); Installation siehe Kopf von `scripts/local-llm/local-model.sh`
 - `/local-delegate <Aufgabe>` — Claude schreibt einen Plan nach `.plans/`, ein lokales Modell setzt ihn im Git-Worktree um, ein zweites lokales Modell prüft
 - `scripts/local-llm/pipeline.sh <plan.md>` — Executor → Tests → Kritiker, bis PASS oder `MAX_ROUNDS`
 - `scripts/local-llm/critic.sh <plan.md> main` — nur lokale Zweitmeinung zu einem Diff
