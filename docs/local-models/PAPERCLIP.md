@@ -103,6 +103,19 @@ Folgen:
   `mcp__Paperclip_projects` (`LOCAL_ALLOWED_MCP`).
 ```
 
+## Arbeitsteilung (ab 28.09.)
+
+Qwen als eigener Paperclip-Agent ist zu langsam: Paperclips Agenten-Protokoll (Anweisungen, Skills,
+MCP-Tools, mehrstufige Abläufe) überfordert ein 3B-aktiv-Modell (5 Min. für einen Kommentar, abgebrochen).
+Deshalb:
+
+- **Klaus** (Claude, Abo) bedient Paperclip, schreibt Pläne und startet `pipeline.sh`.
+- **Qwen** setzt nur konkrete Pläne um (execute.sh), **Gemma** prüft (critic.sh, über LM Studio).
+- Einrichtung: `scripts/local-llm/install-agents.sh` (als Admin) – Harness nach `/Users/agents/local-llm`,
+  Übungs-Repo `/Users/agents/work/demo`.
+- Klaus' Anweisungen um `docs/local-models/klaus-programmieraufgaben.md` ergänzen.
+- `execute.sh` entfernt den Abo-Token und bricht ab, wenn Qwen nicht geladen ist (kein Cloud-Fallback).
+
 ## Offen
 
 - Drei Agenten: Planer (claude_local, Abo), Umsetzer (claude_local mit `ANTHROPIC_BASE_URL=http://localhost:1234`),

@@ -43,6 +43,15 @@ if [[ ! -d "$EXECUTOR_CONFIG_DIR" ]]; then
   echo '{}' > "$EXECUTOR_CONFIG_DIR/settings.json"
 fi
 
+# Kein Cloud-Fallback: Abo-Token entfernen (z. B. wenn Paperclip/Klaus das Skript startet)
+unset CLAUDE_CODE_OAUTH_TOKEN
+state="$(curl -sf --max-time 5 "$EXECUTOR_BASE_URL/api/v0/models" 2>/dev/null \
+  | jq -r --arg m "$EXECUTOR_MODEL" '.data[]? | select(.id == $m) | .state' 2>/dev/null || true)"
+if [[ "$state" != "loaded" ]]; then
+  echo "FEHLER: Executor-Modell '$EXECUTOR_MODEL' nicht geladen (Zustand: ${state:-unbekannt}). lms load ausfuehren." >&2
+  exit 2
+fi
+
 cd "$WORKTREE"
 CLAUDE_CONFIG_DIR="$EXECUTOR_CONFIG_DIR" \
 ANTHROPIC_BASE_URL="$EXECUTOR_BASE_URL" \
