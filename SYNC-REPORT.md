@@ -1,16 +1,16 @@
-## Täglicher Sync-Report – 2026-11-23
+## Täglicher Sync-Report – 2026-11-24
 
 ### Repository
-- `git pull origin main` → Already up to date (HEAD: `2596a58`)
+- `git pull origin main` → Already up to date (HEAD: `bcca6a0`)
 - Keine Merge-Konflikte
-- Letzter Commit: `2596a58` (2026-11-22, docs: daily sync report)
+- Letzter Commit: `bcca6a0` (2026-11-23, docs: daily sync report)
 
 ### Bestand verifiziert
-- **Skills**: 466 Verzeichnisse, 2715 MD-Dateien, 463 SKILL.md
+- **Skills**: 466 Verzeichnisse, 2715 MD-Dateien, 703 SKILL.md
 - **Agents**: 182 Agent-Definitionen (1 leer: `deployment-engineer.md`)
-- **Commands**: 192 Command-Dateien
+- **Commands**: 192 Command-Dateien (2 Verzeichnisse)
 - **Rules**: 9 Regel-Dateien
-- **settings.json**: Valides JSON, 2 Hook-Gruppen (PreToolUse, PostToolUse)
+- **settings.json**: Valides JSON, 2 Hook-Gruppen (4 PreToolUse, 5 PostToolUse), 0 MCP-Server
 
 ### Neu verknüpft (0)
 Keine neuen Skills oder Agents seit letztem Sync.
@@ -19,10 +19,10 @@ Keine neuen Skills oder Agents seit letztem Sync.
 Keine Fehler festgestellt.
 
 ### Bekannte Hinweise (unverändert)
-- `agents/deployment-engineer.md` – leer (0 Bytes) seit 2026-09-23
+- `agents/deployment-engineer.md` – leer (0 Bytes), seit mehreren Wochen bekannt
 - 7 Broken Symlinks in `skills/` zeigen auf `/Users/craftongmbh/paperclip/skills/` (nur lokal relevant): release-changelog, create-agent-adapter, release, paperclip, pr-report, para-memory-files, paperclip-create-agent
-- `skills/document-skills/` – Compound Skill (4 Sub-Skills: docx, pdf, pptx, xlsx), kein SKILL.md auf Top-Level nötig
-- `skills/common/` – Helper-Verzeichnis (README.md + api_key_helper.py), kein SKILL.md nötig
+- `skills/document-skills/` – Compound Skill (4 Sub-Skills), kein SKILL.md auf Top-Level nötig
+- `skills/common/` – Helper-Verzeichnis, kein SKILL.md nötig
 - `skills/learned/` – Erlernte Skills (dynamisch), kein SKILL.md nötig
 - MCP-Server lightpanda, linkedin, dbhub: nicht erreichbar in Cloud-Umgebung (erwartetes Verhalten)
 
@@ -33,4 +33,4 @@ Keine Fehler festgestellt.
 | Agents | 182 |
 | Commands | 192 |
 | Rules | 9 |
-| **Sync-Status** | **100%** |
+| Sync-Status | ✅ 100% |
