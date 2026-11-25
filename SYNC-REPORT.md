@@ -1,9 +1,9 @@
-## Täglicher Sync-Report – 2026-11-24
+## Täglicher Sync-Report – 2026-11-25
 
 ### Repository
-- `git pull origin main` → Already up to date (HEAD: `bcca6a0`)
+- `git pull origin main` → Already up to date (HEAD: `74adf31`)
 - Keine Merge-Konflikte
-- Letzter Commit: `bcca6a0` (2026-11-23, docs: daily sync report)
+- Letzter Commit: `74adf31` (2026-11-24, docs: daily sync report)
 
 ### Bestand verifiziert
 - **Skills**: 466 Verzeichnisse, 2715 MD-Dateien, 703 SKILL.md
