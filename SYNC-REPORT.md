@@ -1,16 +1,16 @@
-## Täglicher Sync-Report – 2026-11-27
+## Täglicher Sync-Report – 2026-11-28
 
 ### Repository
-- `git pull origin main` → Already up to date (HEAD: `59e8f3d`)
+- `git pull origin main` → Already up to date (HEAD: `8cccbd7`)
 - Keine Merge-Konflikte
-- Letzter Commit: `59e8f3d` (2026-11-26, docs: daily sync report)
+- Letzter Commit: `8cccbd7` (2026-11-27, docs: daily sync report)
 
 ### Bestand verifiziert
 - **Skills**: 466 Verzeichnisse, 2715 MD-Dateien
 - **Agents**: 182 Agent-Definitionen (1 leer: `deployment-engineer.md`)
 - **Commands**: 192 Command-Dateien (2 Verzeichnisse)
 - **Rules**: 9 Regel-Dateien
-- **settings.json**: Valides JSON, 4 PreToolUse + 5 PostToolUse Hooks konfiguriert
+- **settings.json**: Valides JSON, Hooks und Plugins konfiguriert
 
 ### Neu verknüpft (0)
 Keine neuen Skills oder Agents seit letztem Sync.
